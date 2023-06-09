@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Projective</title>
+    <script src='../../../../lib/core/ht.js'></script>
+    <script>
+        ht.Default.setImage('caution', 'data:image/jpg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wgARCAAgACADAREAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAABgcICQX/xAAYAQADAQEAAAAAAAAAAAAAAAAFBgcIBP/aAAwDAQACEAMQAAAA5k+K1nFm2HNDpYO0jNG8oUiHNCJAO1DnROjged5gdpGOicGqzi7bnJq6cOidHKzizZDmhEj/xAAoEAABAwIEBgIDAAAAAAAAAAACAwQFBgcAASJREBIUJDJBQmIxYXL/2gAIAQEAAT8AsJYRzcJyNT1Omo3pxuekfEnxZeg+m5YqOpKYtvTBysqo3j4yPRFJFFJPl/HgmmG+Lr3XnrqT3Xv+3j2/MDFiB6UR3z3PP2XCo6kpi29MHKyqjePjI9EUkUUk+X8eCaYb4uvdeeupPde/7ePb8wMWIHpRHfPc8/ZcLB2Ec3CcjU9Tgo3pxuekfEnxD8A+m5YuvdeeupPde/7ePb8wMWIHpRHfPc8/ZcLB2Ec3CcjU9Tgo3pxuekfEnxD8A+m5YqSpKYt1TBysqonHxkeApJppJiP8JJhv+uFg7CObhORqepwUb043PSPiT4h+AfTcsVJUlMW6pg5WVUTj4yPAUk00kxH+Ekw3/WLr3XnrqT3Xv+3j2/MDFiB6UR3z3PP2WP/EACMRAAEDBQACAgMAAAAAAAAAAAEDBAYAAgURMRIhEzIiQUL/2gAIAQIBAT8AmMwTxtpbtDtQ9NMMe6kL3SQ9k+zUcj6Mebiyz7Gu2aHaxzJ3nHASGyT01HY4lgUBamPzPTQ8TztSyYWYe0pIHd9R+ON4+j4WDd1fzr91MZiniky0aHah6aaMHkgcn4tm40PA+h2phLbcOmUEvuaYNHMgefFvdxNR2Op4NIJJDd5r/8QAHREAAgIDAQEBAAAAAAAAAAAAAQIABQMEETEUIf/aAAgBAwEBPwCrq3zP0+R8iaCclhv/AEkxR0TJkTQQkeSwsH23IHkCgyurDsTfsTsxR0SrrHzv1vIzpoJyBQZWV30GOy6CfksLB9tyB5P/2Q==');
+
+        var segments = [ 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2 ];
+        var points = [
+            { "x": 44.22291, "y": 0 }, { "x": 62.44375, "y": 0 }, { "x": 80, "y": 25.31738 }, { "x": 49.85346, "y": 16.87825 },
+            { "x": 44.22291, "y": 0 }, { "x": 29.48194, "y": -10.43134 }, { "x": 30.55728, "y": -40.96438 }, { "x": 49.85346, "y": -16.87825 },
+            { "x": 44.22291, "y": 0 }, { "x": 29.48194, "y": 10.43134 }, { "x": 0, "y": 0 }, { "x": 29.48194, "y": -10.43134 },
+            { "x": 44.22291, "y": 0 }, { "x": 49.85346, "y": -16.87825 }, { "x": 80, "y": -25.31738 }, { "x": 62.44375, "y": 0 },
+            { "x": 44.22291, "y": 0 }, { "x": 49.85346, "y": 16.87825 }, { "x": 30.55728, "y": 40.96438 }, { "x": 29.48194, "y": 10.43134 }
+          ];
+
+        var g3d = new ht.graph3d.Graph3dView();
+        g3d.setEye([0, 1554, 630]);
+        g3d.setGridVisible(true);
+
+        var dm = g3d.dm();
+
+        for (var i = 0; i < 2; i++) {
+            var first = i === 0;
+
+            var shape = new ht.Shape();
+            shape.setSegments(ht.Default.clone(segments));
+            shape.setPoints(ht.Default.clone(points));
+            shape.setThickness(-1);
+            shape.setSize(800, 800);
+            shape.p(500 * (first ? -1 : 1), 0);
+            shape.setRotation(Math.PI / 2);
+            shape.s({
+                'shape3d.color': '#FEB64D',
+                'shape3d.reverse.cull': true,
+                'shape3d.top.image': 'caution',
+                'shape3d.top.uv.scale': first ? [10, 10] : [20, 20],
+                'shape3d.image.projection': !first
+            });
+            dm.add(shape);
+        }
+
+        window.addEventListener('load', function() { 
+            g3d.addToDOM();
+        });
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

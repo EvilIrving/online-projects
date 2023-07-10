@@ -1,6 +1,15 @@
 window.htconfig = {
     Style: {
         'texture.cache': true,
+        "group.padding": "20",
+        "group.background": "transparent",
+        "group.border.pattern":[5, 5],
+        "group.border.color": "#ccc",
+        'edge.dash': true,
+        'edge.dash.flow': true,
+        'edge.dash.pattern':[5,5],
+        'edge.dash.color':'#ccc',
+        'edge.color': '#fff',
     },
     uiTheme: {
         baseColor: 'rgb(51, 153, 255)',

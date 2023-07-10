@@ -1,0 +1,57 @@
+{
+  "name": "high-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "echarts": "^5.4.2",
+    "element-ui": "^2.15.13",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "normalize.css": "^8.0.1",
+    "path-browserify": "^1.0.1",
+    "register-service-worker": "^1.7.2",
+    "svgo": "^3.0.2",
+    "tippy.js": "^6.3.7",
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-pwa": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "html-webpack-plugin": "^5.5.3",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "svg-sprite-loader": "^6.0.11",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {},
+    "globals": {
+      "ht": true
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

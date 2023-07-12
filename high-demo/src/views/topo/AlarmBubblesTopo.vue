@@ -1,11 +1,12 @@
 <template>
-  <div v-loading='loading' style="height:100%">
+  <div v-loading='loading' style="width:100%;height:100%">
     <topo-template :uid='1234' ref='topoTemplate' :contextMenus="contextMenus" :onMenuShow="onMenuShow" @load-success='topoLoad' />
   </div>
 </template>
 
 <script>
 import topoArr from './js/data'
+import { formatNode, createGroup, createNode, createLink, groupPosition } from "./js/util";
 import TopoTemplate from './coms/TopoTemplate.vue'
 export default {
   name: 'AlarmBubblesTopo',
@@ -26,7 +27,7 @@ export default {
       colorOptions: {
         fontColor: '#282828'
       },
-      topoDataArr: [],
+      topoDataObj: [],
       tableDataArr: []
     };
   },
@@ -37,7 +38,7 @@ export default {
 
   },
   created() {
-    this.initAxios()
+    // this.initAxios()
     this.initImage()
   },
   mounted() {
@@ -50,7 +51,6 @@ export default {
       //   const Img = Images[image]
       //   const Names = image.split('/')
       //   const ImgName = Names[Names.length - 1].slice(0, -4)
-      //   // console.log(imgName, 'image');
       //   ht.Default.setImage(ImgName, Img)
       // });
 
@@ -68,50 +68,37 @@ export default {
       return new Promise((resolve, reject) => {
         let condition = true
         if (condition) {
-          resolve(topoArr)
+          const data = formatNode(topoArr)
+          console.log(data, 'init');
+          resolve(data)
         } else {
           reject('error')
         }
       })
     },
     queryListData() { },
-    topoLoad({ GraphView: graphView, DataModel: dataModel, listView, listViewDataModel, ContextMenu }) {
+    async topoLoad({ GraphView: graphView, DataModel: dataModel, listView, listViewDataModel, ContextMenu }) {
       this.graphView = graphView
       this.dataModel = dataModel
       this.listView = listView
       this.listViewDataModel = listViewDataModel
 
-      // TODO  查询数据
-      this.topoDataArr = this.initAxios()
-      // 下边
-      let text = new ht.Text();
-      text.s({
-        'text': '数据同步',
-        'text.color': '#666',
-        'text.vertical': true,
-        'text.vertical.gap': 4,
-        'text.font': '20px arial, sans-serif',
-      });
-      text.setPosition(180, 110);
-      text.setSize(150, 100);
-      dataModel.add(text);
-      let topNode = new ht.Node();
-      topNode.setSize(30, 30);
-      topNode.setPosition(300, 100);
-      topNode.setImage('kafei')
-      topNode.setStyle('label', '一级资源库')
-      dataModel.add(topNode);
-
-      let topGroup = new ht.Group();
-      topGroup.setExpanded(true);
-      topGroup.s({
-        "group.padding.left": "100",
-        "group.padding.right": "100",
-
+      // 渲染node
+      const nodes = []
+      this.topoDataObj = await this.initAxios()
+      Object.keys(groupPosition).forEach(key => {
+        nodes.push(...createNode(this.topoDataObj[key].nodes, {}))
       })
-      console.log(topGroup);
-      topGroup.addChild(topNode)
-      dataModel.add(topGroup);
+      nodes.forEach(node => dataModel.add(node))
+
+      // 渲染组以及文字
+      const groups = createGroup(Object.keys(groupPosition))
+      groups['g'].forEach(group => {
+        
+        dataModel.add(group)
+      })
+      groups['t'].forEach(text => dataModel.add(text))
+
 
       graphView.setMovableFunc = () => true
       // graphView.fitContent(true)
@@ -122,7 +109,7 @@ export default {
       listView.getIconWidth = () => 200
       listView.onDataDoubleClicked = (data) => {
         const { ID } = data.getAttrObject()
-        if (ID) this.tableDataArr = this.initAxios() // TODO 查询列表数据
+        // if (ID) this.tableDataArr = this.initAxios() // TODO 查询列表数据
       }
     },
     renderCC() { },

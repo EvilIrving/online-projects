@@ -10,8 +10,8 @@ const arr = [
         name: '交换机',
         id: 2,
         position: { x: 100, y: 200 },
-        group: null,
-        groupName: null
+        group: 'two',
+        groupName: "中心"
     },
     {
         name: '主机1',
@@ -35,7 +35,6 @@ const arr = [
         position: { x: 100, y: 200 },
         group: 'three',
         groupName: '用户',
-
     },
     {
         name: '主机4',

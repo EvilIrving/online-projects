@@ -5,7 +5,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name =  'vue Element Admin' // page title
+const name = 'vue Element Admin' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -38,15 +38,27 @@ module.exports = {
     // it can be accessed in index.html to inject the correct title.
     name: name,
     resolve: {
-      alias: {
-        '@': resolve('src')
-      }
-    },
-    resolve: {
       fallback: { path: require.resolve("path-browserify") },
     },
   },
   chainWebpack(config) {
+    config.resolve.alias
+      .set("@", resolve("src"))
+      .set("public", resolve("public"))
+      .set("src", resolve("src"))
+      .set("api", resolve("src/api"))
+      .set("icons", resolve("src/icons"))
+      // .set("fonts", resolve("src/assets/fonts"))
+      .set("assets", resolve("src/assets"))
+      .set("geoJson", resolve("src/assets/geoJson"))
+      .set("components", resolve("src/components"))
+      // .set("common", resolve("src/components/common"))
+      // .set("page", resolve("src/components/page"))
+      // .set("config", resolve("src/config"))
+      // .set("style", resolve("src/style"))
+      .set("utils", resolve("src/utils"))
+      .set("views", resolve("src/views"));
+
     // set svg-sprite-loader
     config.module
       .rule('svg')

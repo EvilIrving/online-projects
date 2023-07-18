@@ -46,6 +46,8 @@ export default {
 
   },
   mounted() {
+      // this.init()
+
     setTimeout(() => {
       this.initTopo()
       this.initTips()
@@ -55,6 +57,63 @@ export default {
     })
   },
   methods: {
+    init() {
+      let dataModel = new ht.DataModel();
+      let graphView = new ht.graph.GraphView(dataModel);
+      let view = graphView.getView();
+
+      view.className = 'main';
+      document.body.appendChild(view);
+      window.addEventListener('resize', function (e) {
+        graphView.invalidate();
+      }, false);
+
+      var group = new ht.Group();
+      group.setName('Double click on me');
+      group.setExpanded(true);
+      dataModel.add(group);
+
+      var node1 = new ht.Node();
+      node1.setImage('huoguo')
+      node1.setName('Node1');
+      node1.setPosition(500, 50);
+      group.addChild(node1);
+      dataModel.add(node1);
+
+      var node2 = new ht.Node();
+      node2.setName('Node2');
+      node2.setPosition(180, 80);
+      node2.setParent(group);
+      dataModel.add(node2);
+
+      var node3 = new ht.Node();
+      node3.setPosition(130, 140);
+      node3.s({
+        'label.font': 'bold 21px arial',
+        'label.color': 'white',
+        'label.offset.y': 8,
+        'label.background': '#E74C3C'
+      });
+      node3.setName('HT for Web');
+      node3.setParent(group);
+      dataModel.add(node3);
+
+      var node4 = new ht.Node();
+      node4.setName('The Special One');
+      node4.setStyle('ingroup', false);
+      console.log(group.getRect(), '----');
+      node4.setPosition(290, 100);
+      group.addChild(node4);
+      dataModel.add(node4);
+
+      var oldFunc = graphView.getBoundsForGroup;
+      graphView.getBoundsForGroup = function (child) {
+        if (child === node3) {
+          return node3.getRect();
+        }
+        return oldFunc.call(this, child);
+      };
+    },
     initTopoBar() {
       const items = [
 

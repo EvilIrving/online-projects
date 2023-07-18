@@ -7,10 +7,10 @@ const groupPosition = {
 }
 
 const ps = {
-    'one': { x: 400, y: 100 },
-    'two': { x: 400, y: 300 },
-    'three': { x: 400, y: 600 },
-    'four': { x: 800, y: 300 },
+    'one': { x: 300, y: 100 },
+    'two': { x: 300, y: 400 },
+    'three': { x: 300, y: 700 },
+    'four': { x: 700, y: 400 },
 }
 
 const formatNode = function (data) {
@@ -49,7 +49,7 @@ const createGroup = function (groups, style) {
             "group.padding.right": "100",
         })
 
-        groupView.setPosition(ps[groupView.a('id')].x, ps[groupView.a('id')].y)
+        // groupView.setPosition(ps[groupView.a('id')].x, ps[groupView.a('id')].y)
 
         let text = new ht.Text();
         text.s({
@@ -59,7 +59,8 @@ const createGroup = function (groups, style) {
             'text.vertical.gap': 4,
             'text.font': '20px arial, sans-serif',
         });
-        text.setPosition(ps[groupView.a('id')].x - 20, ps[groupView.a('id')].y);
+
+        text.setPosition(ps[groupView.a('id')].x - 100, ps[groupView.a('id')].y + 10);
         text.setSize(150, 100);
         t.push(text)
         g.push(groupView)
@@ -73,6 +74,8 @@ const createNode = function (nodes, style) {
         let nodeView = new ht.Node()
         nodeView.setSize(30, 30)
         nodeView.setImage('kafei')
+        nodeView.a('id', node.id)
+        nodeView.a('groupId', node.group)
         nodeView.s({
             'label': node.name,
             'name': node.name,
@@ -87,5 +90,9 @@ const createLink = function (sourceNode, targetNode, style) {
 
 }
 
+
+const positionThreeNode = function (node) {
+
+}
 
 export { formatNode, createGroup, createNode, createLink, groupPosition }

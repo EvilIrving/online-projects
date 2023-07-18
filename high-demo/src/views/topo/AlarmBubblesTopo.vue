@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     initImage() {
-      // const Images = require.context('../../assets/svgIcon/', false, /\.svg$/)
+      // const Images = require.context('assets/svgIcon/', false, /\.svg$/)
       // Images.keys().forEach(image => {
       //   const Img = Images[image]
       //   const Names = image.split('/')
@@ -55,11 +55,11 @@ export default {
       // });
 
 
-      ht.Default.setImage('kafei', require('../../assets/svgIcon/kafei.svg'))
-      ht.Default.setImage('huoguo', require('../../assets/svgIcon/huoguo.svg'))
-      ht.Default.setImage('jituizhaji', require('../../assets/svgIcon/jituizhaji-13.svg'))
-      ht.Default.setImage('mianbao', require('../../assets/svgIcon/mianbao.svg'))
-      ht.Default.setImage('shalaqingshi', require('../../assets/svgIcon/shalaqingshi.svg'))
+      ht.Default.setImage('kafei', require('assets/svgIcon/kafei.svg'))
+      ht.Default.setImage('huoguo', require('assets/svgIcon/huoguo.svg'))
+      ht.Default.setImage('jituizhaji', require('assets/svgIcon/jituizhaji-13.svg'))
+      ht.Default.setImage('mianbao', require('assets/svgIcon/mianbao.svg'))
+      ht.Default.setImage('shalaqingshi', require('assets/svgIcon/shalaqingshi.svg'))
     },
 
     onMenuShow() { return true },
@@ -77,6 +77,7 @@ export default {
       })
     },
     queryListData() { },
+
     async topoLoad({ GraphView: graphView, DataModel: dataModel, listView, listViewDataModel, ContextMenu }) {
       this.graphView = graphView
       this.dataModel = dataModel
@@ -87,21 +88,48 @@ export default {
       const nodes = []
       this.topoDataObj = await this.initAxios()
       Object.keys(groupPosition).forEach(key => {
-        nodes.push(...createNode(this.topoDataObj[key].nodes, {}))
+        // nodes.push({
+        //   [key]: [...createNode(this.topoDataObj[key].nodes, {})]
+        // })
+         nodes.push(...createNode(this.topoDataObj[key].nodes, {}))
       })
-      nodes.forEach(node => dataModel.add(node))
+      nodes.forEach(node => {
+        node.a('groupId') === 'one' && node.setPosition(300, 100)
+
+        if (node.a('groupId') === 'two') {
+          node.setPosition(300, 400)
+        }
+
+        if (node.a('groupId') === 'three') {
+          positionThreeNode(node)
+          // node.setPosition(300, 700)
+        }
+
+        if (node.a('groupId') === 'four') {
+          node.setPosition(700, 400)
+        }
+        dataModel.add(node)
+      })
+
 
       // 渲染组以及文字
       const groups = createGroup(Object.keys(groupPosition))
       groups['g'].forEach(group => {
-        
+        nodes.forEach(node => {
+          node.a('groupId') === group.a('id') && group.addChild(node)
+        })
         dataModel.add(group)
+      })
+      nodes.forEach(node => {
+        groups['g'].forEach(group => {
+          node.a('groupId') === group.a('id') && group.addChild(node)
+        })
       })
       groups['t'].forEach(text => dataModel.add(text))
 
 
       graphView.setMovableFunc = () => true
-      // graphView.fitContent(true)
+      graphView.fitContent(true)
       graphView.setSelectableFunc = ((data) => data.a('objId'))
 
       listView.setRowHeight(50)
@@ -112,6 +140,7 @@ export default {
         // if (ID) this.tableDataArr = this.initAxios() // TODO 查询列表数据
       }
     },
+
     renderCC() { },
     renderParent() { },
     renderChildrenGrid() { },

@@ -61,7 +61,7 @@ const arr = [
     },
     {
         name: '显示器2',
-        id: 8,
+        id: 9,
         position: { x: 100, y: 200 },
         group: 'three',
         groupName: '用户',

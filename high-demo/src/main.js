@@ -10,12 +10,20 @@ import './styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
 
+// 将自动注册所有组件为全局组件
+import dataV from '@jiaminghi/data-view'
+
+
+
 import _ from 'lodash'
 
 
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import olMapUtil from './utils/olMapUtils.js'
+
+Vue.prototype.$olMapUtil = olMapUtil;
 
 import './icons' // icon
 
@@ -25,6 +33,8 @@ Vue.prototype._ = _
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
 })
+Vue.use(dataV)
+
 new Vue({
   router,
   store,

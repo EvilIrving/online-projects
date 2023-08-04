@@ -270,7 +270,7 @@ export default {
 .map-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: rgb(2, 0, 36);
   background: linear-gradient(
     90deg,

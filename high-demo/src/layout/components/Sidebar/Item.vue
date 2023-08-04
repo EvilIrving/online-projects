@@ -5,11 +5,11 @@
 <script>
 export default {
   name: 'MenuItem',
-  functional: true,
+  // functional: true,
   props: {
     title: {
       type: String,
-      default: ''
+      default: '111'
     }
   },
 }

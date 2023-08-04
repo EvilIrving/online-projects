@@ -52,7 +52,7 @@ module.exports = {
       .set("assets", resolve("src/assets"))
       .set("geoJson", resolve("src/assets/geoJson"))
       .set("components", resolve("src/components"))
-      // .set("common", resolve("src/components/common"))
+      .set("router", resolve("src/router"))
       // .set("page", resolve("src/components/page"))
       // .set("config", resolve("src/config"))
       // .set("style", resolve("src/style"))

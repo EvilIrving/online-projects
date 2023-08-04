@@ -2,8 +2,9 @@
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+        <el-menu-item style="color: rgb(191, 203, 217);
+    background-color: rgb(48, 65, 86);" :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+          <item :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
@@ -13,6 +14,8 @@
         <item v-if="item.meta" :title="item.meta.title" />
       </template>
       <sidebar-item
+      style="color: rgb(191, 203, 217);
+    background-color: rgb(48, 65, 86);"
         v-for="child in item.children"
         :key="child.path"
         :is-nest="true"
@@ -54,10 +57,13 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+
+    }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
+      console.log(children,'---',parent);
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return false
@@ -75,7 +81,7 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return true
       }
 

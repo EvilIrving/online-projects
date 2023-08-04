@@ -2,7 +2,7 @@
   <div class="app-wrapper">
     <div class="drawer-bg" />
     <sidebar class="sidebar-container" />
-    <div  class="main-container">
+    <div class="main-container">
       <app-main />
     </div>
   </div>
@@ -10,7 +10,6 @@
 
 <script>
 import { AppMain, Sidebar } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
@@ -18,7 +17,6 @@ export default {
     AppMain,
     Sidebar,
   },
-  mixins: [ResizeMixin],
   computed: {
 
 

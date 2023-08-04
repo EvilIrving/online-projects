@@ -3,77 +3,96 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 // import Layout from '@/layout'
-const routes = [
+/* Layout */
+import Layout from '@/layout'
+
+export const routes = [
   {
-    path: '/gante',
-    title: '甘特图',
-    component: () => import('@/views/map/HnMap'),
-    name: 'HnMap',
-    meta: { title: 'HnMap', }
-  },
-  {
-    path: '/alarm',
-    title: '甘特图',
-    component: () => import('@/views/topo/AlarmBubblesTopo'),
-    name: 'AlarmBubblesTopo',
-    meta: { title: 'AlarmBubblesTopo', }
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
   },
   {
     path: '/',
-    title: 'three',
-    component: () => import('@/views/three/Three'),
-    name: 'three',
-    meta: { title: 'three', }
+    component: Layout,
+    redirect: '/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/map/HnMap'),
+        name: 'index',
+        meta: { title: '河南地图', icon: 'index', }
+      }
+    ]
+  },
+  {
+    path: '/three',
+    component: Layout,
+    redirect: '/three/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/three/Three'),
+        name: 'three',
+        meta: { title: 'three', icon: 'index', }
+      }
+    ]
   },
   {
     path: '/topo',
-    name: 'topo',
-    component: null,
-    title: '甘特图',
-    redirect: '/monitortopo',
-    meta: { title: 'topo', },
+    component: Layout,
+    redirect: '/topo/index',
     children: [
-      // {
-      //   path: '/topo/alarm',
-      //   title: '甘特图',
-      //   component: (resolve) => require(['views/topo/AlarmBubblesTopo'],resolve),
-      //   name: 'AlarmBubblesTopo',
-      //   meta: { title: 'AlarmBubblesTopo', }
-      // },
       {
-        path: '/topo/monitortopo',
-        title: '甘特图',
-        component: (resolve) => require(["views/topo/MonitorTopo"], resolve),
-        name: 'MonitorTopo',
-        meta: { title: 'MonitorTopo', }
+        path: 'index',
+        component: ()=>import('@/views/topo/MonitorTopo'),
+        name: 'topo',
+        meta: { title: '拓扑图', icon: 'topo', }
+      }
+    ]
+  },
+
+  {
+    path: '/gante',
+    name: 'gante',
+    component: Layout,
+    redirect: '/gante/weeklyCalendarChart',
+    alwaysShow: true,
+    meta: { title: '甘特图', icon: 'index', },
+    children: [
+      {
+        path: 'weeklyCalendarChart',
+        component: () => import('@/views/gante/WeeklyCalendarChart'),
+        name: 'WeeklyCalendarChart',
+        meta: { title: '甘特图',alwaysShow: true, }
+      },
+      {
+        path: 'weeklyWorkOrderCalendar',
+        component: () => import('@/views/gante/WeeklyWorkOrderCalendar'),
+        name: 'WeeklyWorkOrderCalendar',
+        meta: { title: '日历', }
       }
     ]
   },
   {
-    path: '/gante',
-    name: 'gante',
-    redirect: '/weeklyCalendarChart',
-    component: () => import('@/views/topo/AlarmBubblesTopo'),
-    meta: { title: 'gante', },
+    path: '/design',
+    component: Layout,
+    redirect: '/design/index',
     children: [
       {
-        path: 'gante/weeklyCalendarChart',
-        title: '甘特图',
-        component: () => import('@/views/gante/WeeklyCalendarChart'),
-        name: 'WeeklyCalendarChart',
-        meta: { title: 'WeeklyCalendarChart', }
-      },
-      {
-        path: 'gante/weeklyWorkOrderCalendar',
-        title: '日历',
-        component: () => import('@/views/gante/WeeklyWorkOrderCalendar'),
-        name: 'WeeklyWorkOrderCalendar',
-        meta: { title: 'WeeklyWorkOrderCalendar', }
+        path: 'index',
+        component: ()=>import('@/views/designPatterns/DesignPattern'),
+        name: 'DesignPattern',
+        meta: { title: '设计模式', icon: 'topo', }
       }
     ]
   },
-
-
 ]
 
 const router = new VueRouter({

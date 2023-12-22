@@ -44,17 +44,44 @@ export const routes = [
       }
     ]
   },
+  // {
+  //   path: '/cabint',
+  //   component: Layout,
+  //   redirect: '/cabint/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/topo/MonitorTopo'),
+  //       name: 'index',
+  //       meta: { title: '机柜视图', icon: 'index', }
+  //     }
+  //   ]
+  // },
   {
     path: '/topo',
     component: Layout,
     redirect: '/topo/index',
+    alwaysShow: true,
+    meta: { title: 'High Topo', icon: 'index', },
     children: [
       {
         path: 'index',
-        component: ()=>import('@/views/topo/MonitorTopo'),
+        component: () => import('@/views/topo/MonitorTopo'),
         name: 'topo',
-        meta: { title: '拓扑图', icon: 'topo', }
-      }
+        meta: { title: '监测', icon: 'topo', }
+      },
+      {
+        path: 'alarm',
+        component: () => import('@/views/topo/AlarmBubblesTopo'),
+        name: 'topo',
+        meta: { title: 'demo2', icon: 'topo', }
+      },
+      {
+        path: 'cabinet',
+        component: () => import('@/views/topo/CabinetView'),
+        name: 'cabinet',
+        meta: { title: '机柜视图', icon: 'topo', }
+      },
     ]
   },
 
@@ -70,13 +97,13 @@ export const routes = [
         path: 'weeklyCalendarChart',
         component: () => import('@/views/gante/WeeklyCalendarChart'),
         name: 'WeeklyCalendarChart',
-        meta: { title: '甘特图',alwaysShow: true, }
+        meta: { title: 'demo1', alwaysShow: true, }
       },
       {
         path: 'weeklyWorkOrderCalendar',
         component: () => import('@/views/gante/WeeklyWorkOrderCalendar'),
         name: 'WeeklyWorkOrderCalendar',
-        meta: { title: '日历', }
+        meta: { title: 'demo2', }
       }
     ]
   },
@@ -87,9 +114,22 @@ export const routes = [
     children: [
       {
         path: 'index',
-        component: ()=>import('@/views/designPatterns/DesignPattern'),
+        component: () => import('@/views/designPatterns/DesignPattern'),
         name: 'DesignPattern',
         meta: { title: '设计模式', icon: 'topo', }
+      }
+    ]
+  },
+  {
+    path: '/twaver',
+    component: Layout,
+    redirect: '/twaver/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/TWaver/index.vue'),
+        name: 'DesignPattern',
+        meta: { title: 'TWaver', icon: 'TWaver', }
       }
     ]
   },

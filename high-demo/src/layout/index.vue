@@ -1,6 +1,6 @@
 <template>
   <div class="app-wrapper">
-    <div class="drawer-bg" />
+    <!-- <div class="drawer-bg" /> -->
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <app-main />
@@ -29,7 +29,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/mixin.scss";
-@import "~@/styles/variables.scss";
+@import "~styles/variables.module.scss";
 
 .app-wrapper {
   @include clearfix;

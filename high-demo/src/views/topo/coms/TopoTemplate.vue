@@ -46,74 +46,15 @@ export default {
 
   },
   mounted() {
-      // this.init()
+    // this.init()
 
-    setTimeout(() => {
-      this.initTopo()
-      this.initTips()
-    }, 500)
+    this.initTopo()
+    this.initTips()
     window.addEventListener('resize', () => {
       this.resize()
     })
   },
   methods: {
-    init() {
-      let dataModel = new ht.DataModel();
-      let graphView = new ht.graph.GraphView(dataModel);
-      let view = graphView.getView();
-
-      view.className = 'main';
-      document.body.appendChild(view);
-      window.addEventListener('resize', function (e) {
-        graphView.invalidate();
-      }, false);
-
-      var group = new ht.Group();
-      group.setName('Double click on me');
-      group.setExpanded(true);
-      dataModel.add(group);
-
-      var node1 = new ht.Node();
-      node1.setImage('huoguo')
-      node1.setName('Node1');
-      node1.setPosition(500, 50);
-      group.addChild(node1);
-      dataModel.add(node1);
-
-      var node2 = new ht.Node();
-      node2.setName('Node2');
-      node2.setPosition(180, 80);
-      node2.setParent(group);
-      dataModel.add(node2);
-
-      var node3 = new ht.Node();
-      node3.setPosition(130, 140);
-      node3.s({
-        'label.font': 'bold 21px arial',
-        'label.color': 'white',
-        'label.offset.y': 8,
-        'label.background': '#E74C3C'
-      });
-      node3.setName('HT for Web');
-      node3.setParent(group);
-      dataModel.add(node3);
-
-      var node4 = new ht.Node();
-      node4.setName('The Special One');
-      node4.setStyle('ingroup', false);
-      console.log(group.getRect(), '----');
-      node4.setPosition(290, 100);
-      group.addChild(node4);
-      dataModel.add(node4);
-
-      var oldFunc = graphView.getBoundsForGroup;
-      graphView.getBoundsForGroup = function (child) {
-        if (child === node3) {
-          return node3.getRect();
-        }
-        return oldFunc.call(this, child);
-      };
-    },
     initTopoBar() {
       const items = [
 
@@ -149,12 +90,13 @@ export default {
         const Element = document.createElement('i')
         Element.className = icon
         Element.title = name
+        console.log(Element, 'eleme');
         Element.style.fontSize = '16px'
-        bar.element = Element
+        Bar.element = Element
         Element.addEventListener('click', function () {
           action instanceof Function && action()
         })
-        toolbarItems.push(bar)
+        toolbarItems.push(Bar)
       })
       return new ht.widget.Toolbar(toolbarItems)
     },
@@ -171,11 +113,13 @@ export default {
       return { ListView, ListViewDom }
     },
     initBoderPane(toolbar, listView, graphView) {
-      const BorderPane = new ht.widget.BorderPane()
-      if (toolbar) BorderPane.setTopView(toolbar)
-      if (listView) BorderPane.setLeftView(listView, 201)
-      BorderPane.setCenterView(graphView)
-      return BorderPane
+      const borderPane = new ht.widget.BorderPane();
+
+      console.log(borderPane, 'borderPane');
+      if (toolbar) borderPane.setTopView(toolbar)
+      if (listView) borderPane.setLeftView(listView, 201)
+      borderPane.setCenterView(graphView)
+      return borderPane
     },
     initContextMenu(graphView) {
       const menus = []
@@ -204,6 +148,7 @@ export default {
     },
 
     initTopo() {
+      console.log(ht, 'ht');
       const DataModel = new ht.DataModel()
       const GraphView = new ht.graph.GraphView(DataModel)
 
@@ -221,10 +166,11 @@ export default {
 
       const BorderView = BorderPane.getView()
       const ContextMenu = this.initContextMenu(GraphView)
+      console.log(ContextMenu, 'ContextMenu');
       BorderView.style.cssText = 'margin:0;position:absolute;padding:0;top:0;bottom:0;left:0;right:0;'
       document.querySelector('#topo' + this.uid).appendChild(BorderView)
 
-      this.$emit('load-success', { GraphView, DataModel, listView, listViewDataModel, ContextMenu })
+      this.$emit('load-success', { GraphView, DataModel, listView, listViewDataModel })
 
       this.graphView = GraphView
       this.listView = listView

@@ -3,7 +3,6 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
-        style="background-color: #304156;"
         :default-active="activeMenu"
         :collapse="isCollapse"
         :background-color="variables.menuBg"
@@ -11,7 +10,6 @@
         :unique-opened="false"
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
-        mode="vertical"
       >
         <sidebar-item  v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
@@ -23,9 +21,8 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
-import variables from '@/styles/variables.scss'
-import { routes } from '@/router/index'
-
+import variables from 'styles/variables.module.scss'
+import { routes } from 'router/index'
 export default {
   components: { SidebarItem, Logo },
   computed: {

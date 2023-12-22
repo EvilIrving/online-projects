@@ -25,12 +25,13 @@ module.exports = {
    */
   publicPath: '/',
   outputDir: 'dist',
-  assetsDir: 'static',
+  // assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
     port: port,
     open: true,
+    hot: true
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
@@ -51,16 +52,19 @@ module.exports = {
       // .set("fonts", resolve("src/assets/fonts"))
       .set("assets", resolve("src/assets"))
       .set("geoJson", resolve("src/assets/geoJson"))
-      .set("components", resolve("src/components"))
+      .set("comp", resolve("src/components"))
       .set("router", resolve("src/router"))
       // .set("page", resolve("src/components/page"))
       // .set("config", resolve("src/config"))
-      // .set("style", resolve("src/style"))
+      .set("styles", resolve("src/styles"))
       .set("utils", resolve("src/utils"))
       .set("views", resolve("src/views"));
 
+
     // set svg-sprite-loader
     config.module
+      // .rule('/\.png|jpg|gif|jpeg/')
+      // .loader('file-loader')
       .rule('svg')
       .exclude.add(resolve('src/icons'))
       .end()

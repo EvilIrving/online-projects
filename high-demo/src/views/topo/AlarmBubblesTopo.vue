@@ -1,6 +1,6 @@
 <template>
   <div v-loading='loading' style="width:100%;height:100%">
-    <topo-template :uid='1234' ref='topoTemplate' :contextMenus="contextMenus" :onMenuShow="onMenuShow" @load-success='topoLoad' />
+    <topo-template :uid='1234' :showListView="false" ref='topoTemplate' :contextMenus="contextMenus" :onMenuShow="onMenuShow" @load-success='topoLoad' />
   </div>
 </template>
 

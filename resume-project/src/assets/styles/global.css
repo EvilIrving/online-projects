@@ -9,5 +9,5 @@
 }
 
 .action-button {
-    @apply text-white px-1.5 py-0.5 text-sm rounded-md mt-2 shadow-md transition-all duration-100;
+    @apply text-white px-1.5 py-0.5 text-sm rounded-md shadow-md transition-all duration-100 hover:opacity-85;
 }

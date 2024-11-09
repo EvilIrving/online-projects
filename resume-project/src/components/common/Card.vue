@@ -1,182 +1,91 @@
-<script setup lang="ts">
-import { computed } from 'vue';
-import ArrowIcon from "@/assets/icons/svg/arrow-line-up-right.svg"
-
-
-interface CardProps {
-    // 背景图片URL
-    backgroundImage?: string;
-    // 宽高比例 - 默认1:1
-    aspectRatio?: number;
-    // 卡片宽度
-    width?: string;
-    // 是否以宽度为基准
-    isWidthBase?: boolean;
-    // 是否显示跳转图标
-    showArrow?: boolean;
-    // 是否显示操作按钮
-    showAction?: boolean;
-    // 卡片点击跳转链接
-    href?: string;
-    // 自定义背景色
-    backgroundColor?: string;
-    // 文字颜色
-    textColor?: string;
-    // 边框颜色
-    borderColor?: string;
-    // border 阴影
-    borderShadow?: string;
-
-    // 卡片标题
-    title?: string;
-    // icon
-    icon?: string;
-    // action btn
-    actionBtn?: string;
-    // 用户名/账号
-    username?: string;
-}
-
-const props = withDefaults(defineProps<CardProps>(), {
-    aspectRatio: 1,
-    width: '300px',
-    isWidthBase: false,
-    showArrow: true,
-    showAction: false,
-    backgroundColor: '#000000',
-    textColor: '#ffffff',
-    borderColor: '#000000',
-    borderShadow: 'none'
-})
-
-const arrowIcon = ArrowIcon;
-
-// 计算样式
-const cardStyle = computed(() => ({
-    width: props.width,
-    paddingBottom: `${100 / props.aspectRatio}%`,
-    backgroundColor: props.backgroundColor,
-    backgroundImage: props.backgroundImage ? `url(${props.backgroundImage})` : 'none',
-    borderColor: props.borderColor,
-    borderShadow: props.borderShadow
-}))
-</script>
-
+<!-- SocialCard.vue -->
 <template>
-    <div class="card-wrapper" :style="{ width: width }">
-        <a :href="href" target="_blank" rel="noopener noreferrer" class="card" :style="cardStyle">
-            <div class="content" :style="{ color: textColor }">
-                <!-- 右上角箭头图标 -->
-                <div v-if="showArrow" class="arrow-icon">
-                    <Icon :iconData="arrowIcon" :size="20" />
+    <div :class="clsx({
+        'transition-all duration-100 p-4 shadow-sm cursor-pointer rounded-2xl border': true,
+        [bgColor]: true,
+        [hoverShadow]: true,
+        'w-[150px] h-[150px]': layout === 'card',
+        'w-[350px] h-[70px]': layout !== 'card',
+    })" :style="{ borderColor: borderColor }">
+        <a :href="href" target="_blank" rel="noopener noreferrer" class="block h-full" :style="{ color: textColor }">
+            <div :class="clsx({
+                'relative flex': true,
+                'flex-col': layout !== 'card',
+            })">
+                <!-- Top-right arrow icon -->
+                <div v-if="showArrow" class="absolute -top-4 -right-4 w-[24px] h-[24px]">
+                    <Icon :icon-data="arrowIcon" :size="14" :border="true" />
                 </div>
 
-                <!-- 卡片内容 -->
-                <div class="text-content">
-                    <h2 v-if="title" class="title">{{ title }}</h2>
+                <!-- Card Content -->
+                <div :class="clsx({
+                    'flex': true,
+                    'flex-col': layout === 'card',
+                    'flex-row items-center justify-center gap-2': layout !== 'card',
+                })">
+                    <Icon class="rounded-lg object-contain object-center" :icon-data="iconData"
+                        :size="layout === 'card' ? 35 : 35" />
 
-                    <p v-if="username" class="username">{{ username }}</p>
+                    <div :class="clsx({
+                        'flex flex-col': true,
+                        'mt-2': layout === 'card',
+                    })">
+                        <h2 class="text-base truncate leading-none mb-0.5">{{ brand }}</h2>
+                        <p class="text-sm font-light text-gray-500 truncate leading-tight">
+                            {{ username }}
+                        </p>
+                    </div>
+
+                    <p v-show="layout !== 'card'" class="flex-1"></p>
+
+                    <!-- Action Button -->
+                    <button v-if="showAction" :class="clsx({
+                        'action-button': true,
+                        'mt-2': layout === 'card',
+                    })" :style="{ backgroundColor: actionColor }" @click.stop="$emit('action-click')">
+                        {{ actionText }}
+                    </button>
                 </div>
-
-                <!-- 操作按钮 -->
-                <button v-if="showAction" class="action-button" @click.stop>
-                    Follow
-                </button>
             </div>
         </a>
     </div>
 </template>
 
-<style scoped>
-.card-wrapper {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
+<script setup lang="ts">
+import clsx from 'clsx';
+interface Props {
+    layout?: 'card' | 'row'
+    href?: string
+    textColor?: string
+    bgColor?: string
+    borderColor?: string
+    hoverShadow?: string
+    showArrow?: boolean
+    showAction?: boolean
+    actionText?: string
+    actionColor?: string
+    username: string
+    brand: string
+    iconData: string
+    arrowIcon: string
 }
 
-.card {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 0;
-    background-size: cover;
-    background-position: center;
-    text-decoration: none;
-    overflow: hidden;
-}
+// 使用withDefaults来设置默认值
+const props = withDefaults(defineProps<Props>(), {
+    layout: 'card',
+    href: '#',
+    textColor: '#000',
+    bgColor: 'bg-red-50',
+    borderColor: 'rgba(255, 36, 66, 0.9)',
+    hoverShadow: 'hover:shadow-xl',
+    showArrow: true,
+    showAction: true,
+    actionText: 'Follow',
+    actionColor: 'rgba(255, 39, 65, 0.8)'
+})
 
-.content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.1),
-            rgba(0, 0, 0, 0.4));
-}
-
-.arrow-icon {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(4px);
-    border-radius: 50%;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-}
-
-.card:hover .arrow-icon {
-    opacity: 1;
-}
-
-.text-content {
-    margin-top: auto;
-}
-
-.title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-}
-
-.subtitle {
-    font-size: 1rem;
-    margin: 0 0 4px 0;
-    opacity: 0.9;
-}
-
-.username {
-    font-size: 0.875rem;
-    opacity: 0.7;
-    margin: 0;
-}
-
-.action-button {
-    align-self: flex-start;
-    margin-top: 12px;
-    padding: 6px 16px;
-    border: none;
-    border-radius: 20px;
-    background: #0095f6;
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.action-button:hover {
-    background: #0081d6;
-}
-</style>
+// 定义事件
+defineEmits<{
+    (e: 'action-click'): void
+}>()
+</script>

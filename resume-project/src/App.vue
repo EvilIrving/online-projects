@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
+import Home from '@/views/Home.vue';
 </script>
 
-<template>
-    <h3>fdsaf</h3>
+<template >
+    <Home />
 </template>
 
 <style scoped></style>

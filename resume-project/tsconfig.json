@@ -9,8 +9,21 @@
     }
   ],
   "compilerOptions": {
-    // 解析非相对模块名的基准目录
-    "baseUrl": "./",
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    // 路径配置
+    "baseUrl": ".",
     // 模块名到基于 baseUrl 的路径映射的列表
     "paths": {
       "@/*": [

@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { type ConfigEnv, loadEnv, type UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 
@@ -9,13 +9,19 @@ const root: string = process.cwd();
 const pathResolve = (path: string): string => resolve(root, path);
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: [
-      { find: "@", replacement: pathResolve("src") },
-      { find: "#", replacement: pathResolve("src/types") },
-      { find: "&", replacement: pathResolve("src/views") },
-    ],
-  },
-});
+export default ({ mode }: ConfigEnv): UserConfigExport => {
+  const env = loadEnv(mode, root) as ImportMetaEnv;
+  const { VITE_PUBLIC_PATH } = env;
+  return {
+    /** 打包时根据实际情况修改 base */
+    base: VITE_PUBLIC_PATH,
+
+    plugins: [vue()],
+    resolve: {
+      alias: [
+        // { find: "@", replacement: pathResolve("src") }
+        { find: "@", replacement: resolve(__dirname, "src") },
+      ],
+    },
+  };
+};

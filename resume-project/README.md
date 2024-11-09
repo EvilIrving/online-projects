@@ -89,22 +89,29 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 ├── vite.config.ts       # Vite 配置
 └── package.json         # 项目配置文件
 
+## Card 说明
 
-## Card 说明 
+卡片类型:
 
-Twitter 
-Instagram
-Github
-Product Hunt
-Youtube
-Buy Me a Coffee
-Image & Video
-Text
+- Twitter
+- Instagram
+- Github
+- Product Hunt
+- Youtube
+- Buy Me a Coffee
+- Image & Video
+- Text
 
-Map,位置
-小红书
-微信
-微博
-网易云
-即刻
-小宇宙
+- Map,位置
+- 小红书
+- 微信
+- 微博
+- 网易云
+- 即刻
+- 小宇宙
+
+寻找logo:
+
+<https://svglogo.top/>
+<https://simpleicons.org/>
+<https://www.radix-ui.com/icons>

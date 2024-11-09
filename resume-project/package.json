@@ -11,6 +11,7 @@
   "dependencies": {
     "@pureadmin/utils": "^2.4.9",
     "@types/node": "^22.9.0",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "lottie-web": "^5.12.2",
     "vue": "^3.5.12"

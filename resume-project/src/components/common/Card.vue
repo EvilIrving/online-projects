@@ -4,18 +4,14 @@ import ArrowIcon from "@/assets/icons/svg/arrow-line-up-right.svg"
 
 
 interface CardProps {
-    // 卡片标题
-    title?: string;
-    // 子标题/描述
-    subtitle?: string;
-    // 用户名/账号
-    username?: string;
     // 背景图片URL
     backgroundImage?: string;
     // 宽高比例 - 默认1:1
     aspectRatio?: number;
     // 卡片宽度
     width?: string;
+    // 是否以宽度为基准
+    isWidthBase?: boolean;
     // 是否显示跳转图标
     showArrow?: boolean;
     // 是否显示操作按钮
@@ -26,15 +22,31 @@ interface CardProps {
     backgroundColor?: string;
     // 文字颜色
     textColor?: string;
+    // 边框颜色
+    borderColor?: string;
+    // border 阴影
+    borderShadow?: string;
+
+    // 卡片标题
+    title?: string;
+    // icon
+    icon?: string;
+    // action btn
+    actionBtn?: string;
+    // 用户名/账号
+    username?: string;
 }
 
 const props = withDefaults(defineProps<CardProps>(), {
     aspectRatio: 1,
     width: '300px',
+    isWidthBase: false,
     showArrow: true,
     showAction: false,
     backgroundColor: '#000000',
-    textColor: '#ffffff'
+    textColor: '#ffffff',
+    borderColor: '#000000',
+    borderShadow: 'none'
 })
 
 const arrowIcon = ArrowIcon;
@@ -44,7 +56,9 @@ const cardStyle = computed(() => ({
     width: props.width,
     paddingBottom: `${100 / props.aspectRatio}%`,
     backgroundColor: props.backgroundColor,
-    backgroundImage: props.backgroundImage ? `url(${props.backgroundImage})` : 'none'
+    backgroundImage: props.backgroundImage ? `url(${props.backgroundImage})` : 'none',
+    borderColor: props.borderColor,
+    borderShadow: props.borderShadow
 }))
 </script>
 
@@ -60,7 +74,7 @@ const cardStyle = computed(() => ({
                 <!-- 卡片内容 -->
                 <div class="text-content">
                     <h2 v-if="title" class="title">{{ title }}</h2>
-                    <p v-if="subtitle" class="subtitle">{{ subtitle }}</p>
+
                     <p v-if="username" class="username">{{ username }}</p>
                 </div>
 

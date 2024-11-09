@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Profile from '@/components/Profile.vue';
-import Projects from '@/views/Projects.vue';
+import InstagramCard from '@/components/cards/InstagramCard.vue';
 </script>
 
 <template>
@@ -10,7 +10,8 @@ import Projects from '@/views/Projects.vue';
         </div>
         <div class="relative flex-1 xl:w-[820px] xl:flex-none">
             <div class="bento-grid">
-                <Projects></Projects>
+                <!-- <Projects></Projects> -->
+                <InstagramCard></InstagramCard>
             </div>
 
         </div>

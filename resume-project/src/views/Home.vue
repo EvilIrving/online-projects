@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Profile from '@/components/Profile.vue';
 import InstagramCard from '@/components/cards/InstagramCard.vue';
+import WeChatCard from '@/components/cards/WeChatCard.vue';
 </script>
 
 <template>
@@ -9,9 +10,22 @@ import InstagramCard from '@/components/cards/InstagramCard.vue';
             <Profile></Profile>
         </div>
         <div class="relative flex-1 xl:w-[820px] xl:flex-none">
-            <div class="bento-grid">
+            <div class="bento-grid flex flex-col gap-4">
                 <!-- <Projects></Projects> -->
-                <InstagramCard></InstagramCard>
+
+
+
+                <div class="flex flex-row flex-wrap gap-4">
+
+                    <InstagramCard></InstagramCard>
+
+
+
+                </div>
+
+                <div class="flex flex-row flex-wrap gap-4">
+                    <WeChatCard></WeChatCard>
+                </div>
             </div>
 
         </div>

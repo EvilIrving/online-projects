@@ -13,7 +13,7 @@
                 'flex-col': layout !== 'card',
             })">
                 <!-- Top-right arrow icon -->
-                <div v-if="showArrow" class="absolute -top-4 -right-4 w-[24px] h-[24px]">
+                <div v-if="showArrow" class="absolute -top-3 -right-3 w-[24px] h-[24px]">
                     <Icon :icon-data="arrowIcon" :size="14" :border="true" />
                 </div>
 
@@ -42,6 +42,7 @@
                     <button v-if="showAction" :class="clsx({
                         'action-button': true,
                         'mt-2': layout === 'card',
+                        'mr-3': layout !== 'card',
                     })" :style="{ backgroundColor: actionColor }" @click.stop="$emit('action-click')">
                         {{ actionText }}
                     </button>
@@ -89,3 +90,5 @@ defineEmits<{
     (e: 'action-click'): void
 }>()
 </script>
+
+ 

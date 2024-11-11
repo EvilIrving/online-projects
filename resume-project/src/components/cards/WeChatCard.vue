@@ -8,6 +8,8 @@
       :icon-data="card.iconData"
       :arrow-icon="card.arrowIcon"
       :bg-color="colors.bgColor"
+      :description="card.description"
+      :image="card.image"
       :border-color="colors.border"
       :action-color="colors.action"
       @action-click="handleFollow"
@@ -16,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-// 点击
-import Card from "@/components/common/Card.vue"
 
+import ExampleImage from "@/assets/images/example.jpg"
+import Card from "@/components/common/Card.vue"
 const colors = {
     brand: "#07c160",
     bgColor: "bg-[#07c16017]",
@@ -43,17 +45,21 @@ const cards = ref([
         username: "@heyiwuyi",
         iconData: wechatIcon,
         arrowIcon: arrowIcon,
+        image: ExampleImage,
+        description: "微信扫一扫，关注公众号",
     },
     {
-        layout: "row",
+        layout: "2:2",
         brand: "微信",
         username: "@heyiwuyi",
         iconData: wechatIcon,
         arrowIcon: arrowIcon,
+        description: "微信扫一扫，关注公众号",
+        image: ExampleImage
     }
 ])
 
 const handleFollow = () => {
-     // 复制微信号,  到手机查看
+    // 复制微信号,  到手机查看
 }
 </script>

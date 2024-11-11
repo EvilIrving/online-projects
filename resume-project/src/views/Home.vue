@@ -2,6 +2,7 @@
 import Profile from '@/components/Profile.vue';
 import InstagramCard from '@/components/cards/InstagramCard.vue';
 import WeChatCard from '@/components/cards/WeChatCard.vue';
+import UsageCard from '@/components/cards/UsageCard.tsx';
 </script>
 
 <template>
@@ -14,7 +15,7 @@ import WeChatCard from '@/components/cards/WeChatCard.vue';
                 <!-- <Projects></Projects> -->
 
 
-
+                <!-- 
                 <div class="flex flex-row flex-wrap gap-4">
 
                     <InstagramCard></InstagramCard>
@@ -25,7 +26,11 @@ import WeChatCard from '@/components/cards/WeChatCard.vue';
 
                 <div class="flex flex-row flex-wrap gap-4">
                     <WeChatCard></WeChatCard>
-                </div>
+                </div> -->
+
+
+                <UsageCard></UsageCard>
+
             </div>
 
         </div>

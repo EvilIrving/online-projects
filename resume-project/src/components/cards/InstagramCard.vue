@@ -1,6 +1,7 @@
 <template lang="">
 
 <Card
+  layout="card"
   brand="小红书"
   username="@cain"
   :icon-data="xiaohongshuIcon"

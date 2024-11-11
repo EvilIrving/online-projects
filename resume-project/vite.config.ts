@@ -1,6 +1,7 @@
 import { type ConfigEnv, loadEnv, type UserConfigExport } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
+import vueJsx from "@vitejs/plugin-vue-jsx";
 
 /** 当前执行 node 命令时文件夹的地址（工作目录） */
 const root: string = process.cwd();
@@ -16,7 +17,12 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     /** 打包时根据实际情况修改 base */
     base: VITE_PUBLIC_PATH,
 
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      vueJsx({
+        // options are passed on to @vue/babel-plugin-jsx: https://github.com/vuejs/babel-plugin-jsx/blob/HEAD/packages/babel-plugin-jsx/README-zh_CN.md
+      }),
+    ],
     resolve: {
       alias: [
         // { find: "@", replacement: pathResolve("src") }

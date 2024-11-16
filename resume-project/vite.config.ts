@@ -25,8 +25,9 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     ],
     resolve: {
       alias: [
-        // { find: "@", replacement: pathResolve("src") }
-        { find: "@", replacement: resolve(__dirname, "src") },
+        { find: "@@", replacement: resolve(__dirname, "src") },
+        { find: "@", replacement: resolve(__dirname, "base") },
+        { find: "#", replacement: resolve(__dirname, "domain") },
       ],
     },
   };

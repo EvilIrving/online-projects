@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Chrome from '@/assets/icons/Chrome.json';
-import Camera from '@/assets/icons/Camera V3.json';
-import Hacker from '@/assets/icons/Hacker.json';
-import Phone from '@/assets/icons/phone.json';
+import Chrome from '@@/assets/icons/Chrome.json';
+import Camera from '@@/assets/icons/Camera V3.json';
+import Hacker from '@@/assets/icons/Hacker.json';
+import Phone from '@@/assets/icons/phone.json';
 
 import { ref, shallowRef } from 'vue';
 

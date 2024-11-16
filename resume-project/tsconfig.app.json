@@ -28,6 +28,12 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "domain/**/*.vue",
+    "domain/**/*.ts",
+    "domain/**/*.tsx",
+    "base/**/*.vue",
+    "base/**/*.ts",
+    "base/**/*.tsx"
   ]
 }

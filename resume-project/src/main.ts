@@ -1,8 +1,8 @@
 import { createApp } from "vue";
-import "@/assets/styles/global.css";
-import "@/assets/styles/fonts.css";
+import "@/styles/global.css";
+import "@/styles/fonts.css";
 import App from "./App.vue";
-import globalComponents from "@/components/global";
+import globalComponents from "@/components";
 
 const app = createApp(App);
 

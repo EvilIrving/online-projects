@@ -3,6 +3,12 @@ import Profile from '@/components/Profile.vue';
 import InstagramCard from '@/components/cards/InstagramCard.vue';
 import WeChatCard from '@/components/cards/WeChatCard.vue';
 import UsageCard from '@/components/cards/UsageCard.tsx';
+
+import ImageCard from '@/components/image-card/index';
+import exampleImg from '@/assets/images/01.jpg';
+
+
+const image = exampleImg
 </script>
 
 <template>
@@ -29,8 +35,8 @@ import UsageCard from '@/components/cards/UsageCard.tsx';
                 </div> -->
 
 
-                <UsageCard></UsageCard>
-
+                <!-- <UsageCard></UsageCard> -->
+                <ImageCard :image="image" desc="example" link="https://www.baidu.com"></ImageCard>
             </div>
 
         </div>

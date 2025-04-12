@@ -37,6 +37,7 @@
 
 ## 📂 项目结构
 
+```shell
 online-projects-cv/
 ├── src/
 │   ├── assets/            # 静态资源
@@ -49,3 +50,4 @@ online-projects-cv/
 ├── public/               # 公共资源
 ├── vite.config.js        # Vite配置
 └── package.json          # 项目依赖
+```

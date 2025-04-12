@@ -30,6 +30,7 @@
 
 ## 项目结构
 
+```shell
 .
 ├── public/                 # 静态资源目录
 │   ├── favicon.ico        # 网站图标
@@ -114,6 +115,7 @@
 ├── tsconfig.json        # TypeScript 配置
 ├── vite.config.ts       # Vite 配置
 └── package.json         # 项目配置文件
+```
 
 ## Card 说明
 

@@ -5,9 +5,10 @@ const getImagesFromFolder = (folderPath) => {
   });
   const images = [];
 
-  for (const [path] of Object.entries(imageModules)) {
+  for (const [path, module] of Object.entries(imageModules)) {
     if (path.includes(folderPath)) {
-      images.push(new URL(path, import.meta.url).href);
+      images.push(module.default);
+      // images.push(new URL(path, import.meta.url).href);
     }
   }
 

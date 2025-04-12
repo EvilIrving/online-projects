@@ -1,0 +1,32 @@
+.duolingo-btn {
+    position: relative;
+    display: inline-block;
+    padding: 1rem 2rem;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.125rem;
+    border-radius: 9999px;
+    background-color: var(--btn-bg);
+    cursor: pointer;
+    transition: filter 0.2s ease;
+    z-index: 0;
+}
+
+.duolingo-btn:hover {
+    filter: brightness(1.05);
+}
+
+.duolingo-btn::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background-color: var(--btn-bg);
+    box-shadow: 0 var(--btn-lip) 0 var(--btn-lip-color);
+    transition: box-shadow 0.2s ease;
+}

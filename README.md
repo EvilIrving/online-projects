@@ -1,117 +1,51 @@
-# Vue 3 + TypeScript + Vite
+# CV Projects - 项目作品集展示
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![React](https://img.shields.io/badge/React-19.0.0-blue)
+![Vite](https://img.shields.io/badge/Vite-6.2.0-purple)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.0+-green)
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+一个基于 React + Vite 构建的个人项目作品集展示平台，采用现代化前端技术栈开发。
 
-.
-├── public/                 # 静态资源目录
-│   ├── favicon.ico        # 网站图标
-│   └── index.html         # 主 HTML 文件
-│
-├── src/                   # 源代码目录
-│   ├── api/              # API 接口管理
-│   │   ├── modules/      # 按模块划分的接口文件
-│   │   │   ├── user.ts   # 用户相关接口
-│   │   │   └── product.ts # 产品相关接口
-│   │   └── request.ts    # axios 请求封装
-│   │
-│   ├── assets/           # 静态资源
-│   │   ├── images/       # 图片资源
-│   │   ├── styles/       # 样式文件
-│   │   │   ├── variables.scss  # 全局变量
-│   │   │   └── global.scss     # 全局样式
-│   │   └── fonts/        # 字体文件
-│   │
-│   ├── components/       # 全局公共组件
-│   │   ├── common/       # 基础公共组件
-│   │   │   ├── Button/
-│   │   │   └── Input/
-│   │   └── business/     # 业务公共组件
-│   │       ├── Header/
-│   │       └── Footer/
-│   │
-│   ├── composables/      # 组合式函数
-│   │   ├── useUser.ts
-│   │   └── useTheme.ts
-│   │
-│   ├── constants/        # 常量定义
-│   │   ├── api.ts       # API 相关常量
-│   │   └── enum.ts      # 枚举值
-│   │
-│   ├── directives/       # 全局指令
-│   │   ├── permission.ts
-│   │   └── index.ts
-│   │
-│   ├── hooks/           # 钩子函数
-│   │   ├── usePermission.ts
-│   │   └── useCache.ts
-│   │
-│   ├── layouts/         # 布局组件
-│   │   ├── DefaultLayout.vue
-│   │   └── UserLayout.vue
-│   │
-│   ├── router/          # 路由配置
-│   │   ├── modules/     # 路由模块
-│   │   ├── guards.ts    # 路由守卫
-│   │   └── index.ts     # 路由主文件
-│   │
-│   ├── stores/          # Pinia 状态管理
-│   │   ├── modules/     # 状态模块
-│   │   │   ├── user.ts
-│   │   │   └── app.ts
-│   │   └── index.ts
-│   │
-│   ├── types/           # TypeScript 类型定义
-│   │   ├── api.ts       # API 相关类型
-│   │   └── global.d.ts  # 全局类型声明
-│   │
-│   ├── utils/           # 工具函数
-│   │   ├── auth.ts      # 认证相关
-│   │   ├── request.ts   # 请求相关
-│   │   └── storage.ts   # 存储相关
-│   │
-│   ├── views/           # 页面组件
-│   │   ├── home/        # 按模块划分页面
-│   │   ├── user/
-│   │   └── error/
-│   │
-│   ├── App.vue          # 根组件
-│   ├── main.ts          # 入口文件
-│   └── env.d.ts         # 环境变量类型声明
-│
-├── .env                  # 环境变量
-├── .env.development      # 开发环境变量
-├── .env.production       # 生产环境变量
-├── .eslintrc.js         # ESLint 配置
-├── .prettierrc          # Prettier 配置
-├── tsconfig.json        # TypeScript 配置
-├── vite.config.ts       # Vite 配置
-└── package.json         # 项目配置文件
+## ✨ 项目特点
 
-## Card 说明
+- **响应式设计**：适配各种屏幕尺寸
+- **现代化UI**：采用 TailwindCSS 构建美观界面
+- **高效开发**：基于 Vite 的快速开发体验
+- **项目分类**：清晰展示不同类型的技术项目
 
-卡片类型:
+## 🚀 项目列表
 
-- Twitter
-- Instagram
-- Github
-- Product Hunt
-- Youtube
-- Buy Me a Coffee
-- Image & Video
-- Text
+1. **TMS (新一代通信管理系统)**
+   - 技术栈: Vue.js, HighTopo, 无界, Element UI
+   - 功能: 实时监控、资源管理、通信方式规划等
 
-- Map,位置
-- 小红书
-- 微信
-- 微博
-- 网易云
-- 即刻
-- 小宇宙
+2. **智慧工程大屏 (鹿城区水利系统)**
+   - 技术栈: Vue.js, Openlayers, ECharts
+   - 功能: 水利工程监管、预警分析、数据可视化
 
-寻找logo:
+3. **运管平台 (浙江水利工程运行管理平台)**
+   - 技术栈: Vue.js, Openlayers, HighCharts
+   - 功能: 海塘防潮评估、流域工程调度等
 
-<https://svglogo.top/>
-<https://simpleicons.org/>
-<https://www.radix-ui.com/icons>
+## 🛠️ 技术栈
+
+- **前端框架**: React 19
+- **构建工具**: Vite 6
+- **样式方案**: TailwindCSS
+- **代码规范**: ESLint
+- **路由管理**: React Router
+
+## 📂 项目结构
+
+online-projects-cv/
+├── src/
+│   ├── assets/            # 静态资源
+│   ├── components/        # 公共组件
+│   │   ├── Menus.jsx      # 侧边导航菜单
+│   │   └── Project.jsx    # 项目详情组件
+│   ├── config/           # 项目配置
+│   ├── App.jsx           # 主应用入口
+│   └── main.jsx          # 应用启动文件
+├── public/               # 公共资源
+├── vite.config.js        # Vite配置
+└── package.json          # 项目依赖

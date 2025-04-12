@@ -1,8 +1,34 @@
-# Vue 3 + TypeScript + Vite
+# Vue 3 社交卡片项目
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个基于 Vue 3 和 TypeScript 构建的现代化社交卡片展示项目，支持多种社交媒体平台卡片样式。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 项目特点
+
+- 🎨 多种社交媒体卡片样式 (微博、音乐、播客、网站等)
+- 🚀 基于 Vue 3 + Vite 的现代化前端架构
+- 📱 响应式设计，适配多种设备
+- 🎭 使用 JSX 语法编写组件
+- 🌈 动态主题支持
+
+## 技术栈
+
+### 核心框架
+
+- [Vue 3](https://vuejs.org/) - 前端框架
+- [Vite](https://vitejs.dev/) - 构建工具
+
+### UI & 动画
+
+- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
+- [Lottie](https://airbnb.design/lottie/) - 动画渲染 (v5.12.2)
+- [clsx](https://github.com/lukeed/clsx) - 动态 class 组合
+
+### 工具库
+
+- [Day.js](https://day.js.org/) - 日期处理
+- [@pureadmin/utils](https://github.com/pure-admin/utils) - 实用工具集
+
+## 项目结构
 
 .
 ├── public/                 # 静态资源目录

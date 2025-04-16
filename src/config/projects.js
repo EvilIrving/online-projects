@@ -1,6 +1,6 @@
 // 获取文件夹下所有图片的函数
 const getImagesFromFolder = (folderPath) => {
-  const imageModules = import.meta.glob("@/assets/cv/*/*.{png,jpg,jpeg,svg}", {
+  const imageModules = import.meta.glob("@/assets/cv/*/*.{png,jpg,jpeg,svg,mp4}", {
     eager: true,
   });
   const images = [];
@@ -46,5 +46,41 @@ export const projects = [
     description:
       "通过构建海塘防潮评估、流域工程调度、水域占用审批、工程物业管理四大核心场景，实现水利数据的全域汇聚与共享，达成“一数一源”的目标。平台完善了海塘安全物联感知体系，支持案例监测数据自动汇聚，并通过省级工程运管模块提升水旱灾害防御决策水平。",
     images: getImagesFromFolder("yunguan"),
+  },
+  {
+    title: "养老金计算",
+    name: "养老金预估计算",
+    techs: ["Vue.js", "Ant Design Pro", "Tailwind CSS"],
+    icon: "💰",
+    description: "通过对用户的基本信息进行输入，计算出用户的养老金预估值。",
+    images: getImagesFromFolder("yanglao"),
+  },
+  {
+    title: "植物小科普",
+    name: "苏州市科普资助项目-植物小科普",
+    description:
+      "一个基于 Vue.js 的植物小科普网站，通过图片和文字，展示了植物的基本信息、生长环境、繁殖方式等内容，帮助用户了解植物的基本情况。",
+    techs: ["Vue.js", "Element Plus", "Vant", "Tailwind CSS"],
+    icon: "💰",
+
+    images: getImagesFromFolder("zhiwu"),
+  },
+  {
+    title: "Telegram Bot",
+    name: "Product Hub 爬取机器人",
+    description:
+      "一个 Telegram Bot，用于爬取 Product Hub 网站上的产品信息，并将其发送到指定的 Telegram 频道。",
+    techs: ["Python", "Telegram Bot API", "GraphQL", "Cloudflare Workers"],
+    icon: "💰",
+    images: getImagesFromFolder("telegram"),
+  },
+  {
+    title: "裕和国际货运有限公司官网",
+    name: "裕和国际货运有限公司官网",
+    description:
+      "加纳YUHE公司成立于2017年，办公室位于北部城市Tamale。是一家从事工程建筑、工程机械进口、农业机械进口、网站建设以及国际货物运输的集团公司。",
+    techs: ["Next.js", "Tailwind CSS", "Vercel"],
+    icon: "💰",
+    images: getImagesFromFolder("yuhe"),
   },
 ];

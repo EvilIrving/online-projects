@@ -253,72 +253,6 @@ const LargeDataChart = () => {
     setIsLoading(false);
   };
 
-  // WebGL 渲染实现
-  const loadWebGLData = () => {
-    setIsLoading(true);
-
-    if (!chartInstance.current) {
-      chartInstance.current = initChart(chartRef.current);
-    }
-
-    // 格式化数据为 WebGL 所需格式 [时间索引, 值]
-    const webglData = chartData.map((item, index) => [index, item[1]]);
-
-    // 设置 WebGL 配置
-    chartInstance.current.setOption({
-      title: {
-        text: `大数据量折线图 - WebGL渲染 (${chartData.length}个数据点)`,
-      },
-      xAxis: {
-        type: "category",
-        data: chartData.map((item) => item[0]),
-        axisLabel: {
-          formatter: function (value) {
-            return value;
-          },
-        },
-      },
-      yAxis: {
-        type: "value",
-        axisLabel: {
-          formatter: "{value} 元",
-        },
-      },
-      series: [
-        {
-          name: "金额",
-          type: "line", // 保持为线图类型
-          data: webglData,
-          renderItem: function (params, api) {
-            // 使用renderItem自定义WebGL渲染
-            return {
-              type: "line",
-              shape: {
-                x1: api.coord([api.value(0), api.value(1)])[0],
-                y1: api.coord([api.value(0), api.value(1)])[1],
-                x2: api.coord([api.value(0) + 1, api.value(1)])[0],
-                y2: api.coord([api.value(0) + 1, api.value(1)])[1],
-              },
-              style: {
-                stroke: api.visual("color"),
-                lineWidth: 1,
-              },
-            };
-          },
-          // 开启 WebGL 渲染模式
-          progressive: 20000,
-          progressiveThreshold: 30000,
-          progressiveChunkMode: "mod",
-          // 大数据集开启 large 模式
-          large: true,
-          largeThreshold: 10000,
-        },
-      ],
-    });
-
-    setIsLoading(false);
-  };
-
   // Switch optimization method and reload data
   useEffect(() => {
     if (!chartData.length) return;
@@ -339,9 +273,7 @@ const LargeDataChart = () => {
       case "aggregated":
         loadAggregatedData();
         break;
-      case "webgl":
-        loadWebGLData();
-        break;
+
       default:
         loadChunkedData();
     }
@@ -403,15 +335,6 @@ const LargeDataChart = () => {
           >
             聚合优化
           </button>
-          <button
-            className={`px-4 py-2 rounded mb-2 ${
-              activeTab === "webgl" ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => setActiveTab("webgl")}
-            disabled={isLoading}
-          >
-            WebGL渲染
-          </button>
         </div>
       </div>
 
@@ -458,19 +381,6 @@ const LargeDataChart = () => {
             </p>
             <p>优点: 显著减少渲染压力，保持数据趋势。</p>
             <p>缺点: 细节信息可能丢失，不适合需要精确展示的场景。</p>
-          </div>
-        )}
-        {activeTab === "webgl" && (
-          <div>
-            <p className="mb-2">
-              <strong>WebGL渲染:</strong>{" "}
-              使用图形硬件加速，直接在GPU上渲染图表。
-            </p>
-            <p>优点: 最佳性能表现，能流畅处理百万级数据点。</p>
-            <p>缺点: 对老旧浏览器和设备兼容性较差，加载初始资源较大。</p>
-            <p className="mt-2 text-blue-600">
-              提示: 此模式充分利用显卡加速，对大数据集渲染效果最佳
-            </p>
           </div>
         )}
       </div>

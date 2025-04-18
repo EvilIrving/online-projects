@@ -4,15 +4,30 @@ import { getLineChartData } from "@/mock/lineChartData";
 
 const LargeDataChart = () => {
   const [chartData, setChartData] = useState([]);
+  const [chartLength, setChartLength] = useState(0);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const [activeTab, setActiveTab] = useState("chunked");
+  const renderTypes = [
+    {
+      label: "分片加载",
+      value: "chunked",
+      desc: "使用 progressive 和 progressiveThreshold 设定片大小",
+    },
+    { label: "虚拟渲染", value: "virtual", desc: "DataZoom 设定 min & max" },
+    { label: "聚合优化", value: "aggregated", desc: "自定义降采样方案" },
+    { label: "Lttp", value: "lttp", desc: "官方降采样" },
+    { label: "MinMax", value: "minmax", desc: "官方降采样" },
+  ];
+  const [activeTab, setActiveTab] = useState(renderTypes[0]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch data
+    console.time("fetchData");
     const data = getLineChartData();
+    setChartLength(data.data.length);
     // Format data for chart and sort by date
+    console.timeEnd("fetchData");
     const formattedData = data.data
       .map((item) => [item.date, item.value])
       .sort((a, b) => new Date(a[0]) - new Date(b[0])); // 按日期升序排序
@@ -27,21 +42,17 @@ const LargeDataChart = () => {
     const chart = echarts.init(containerRef, null, { renderer: "canvas" });
     const option = {
       title: {
-        text: "大数据量折线图优化示例 (30万数据点)",
+        text: "大数据量散点图优化示例",
         left: "center",
       },
       legend: {
         data: ["金额"],
         left: "left",
       },
-
       tooltip: {
-        trigger: "axis",
+        trigger: "item",
         formatter: function (params) {
-          const data = params[0];
-          return `${data.name}<br/>${data.seriesName}: ${data.value[1].toFixed(
-            2
-          )} 元`;
+          return `${params.data[0]}<br/>金额: ${params.data[1].toFixed(2)} 元`;
         },
       },
       grid: {
@@ -69,14 +80,29 @@ const LargeDataChart = () => {
       series: [
         {
           name: "金额",
-          type: "line",
-          sampling: "lttb",
-          showSymbol: false,
-          lineStyle: {
-            width: 1,
+          type: "scatter",
+          symbolSize: function (data) {
+            // 根据数值大小调整点的大小
+            return Math.min(8, Math.max(2, data[1] / 10000));
+          },
+          itemStyle: {
+            color: function (params) {
+              // 根据数值大小调整颜色
+              const value = params.data[1];
+              return value > 50000
+                ? "#c23531"
+                : value > 30000
+                ? "#2f4554"
+                : "#61a0a8";
+            },
+            opacity: 0.7,
           },
           emphasis: {
-            focus: "series",
+            itemStyle: {
+              color: "#c23531",
+              borderColor: "#fff",
+              borderWidth: 2,
+            },
           },
           data: [],
         },
@@ -87,11 +113,9 @@ const LargeDataChart = () => {
     return chart;
   };
 
-  // Chunked loading implementation
+  // 分片加载
   const loadChunkedData = async () => {
     setIsLoading(true);
-    // const CHUNK_SIZE = 10000;
-    // const totalChunks = Math.ceil(chartData.length / CHUNK_SIZE);
 
     // Initialize chart
     if (!chartInstance.current) {
@@ -99,45 +123,24 @@ const LargeDataChart = () => {
     }
 
     // Set initial empty chart
+    const progressive = chartLength / 10;
     chartInstance.current.setOption({
       series: [
         {
           data: chartData,
-          progressive: 10000, // 渐进渲染
+          progressive: progressive, // 渐进渲染
           progressiveThreshold: 5000, // 渐进渲染阈值
         },
       ],
       title: {
-        text: `大数据量折线图 - 分片加载 (${chartData.length}个数据点)`,
+        text: `分片加载，每次${progressive}`,
       },
     });
-
-    // Progressive rendering
-    // for (let i = 0; i < totalChunks; i++) {
-    //   const start = i * CHUNK_SIZE;
-    //   const end = Math.min(start + CHUNK_SIZE, chartData.length);
-    //   const chunk = chartData.slice(start, end);
-
-    //   chartInstance.current.appendData({
-    //     seriesIndex: 0,
-    //     data: chunk,
-    //   });
-
-    //   // Update title to show loading progress
-    //   chartInstance.current.setOption({
-    //     title: {
-    //       text: `大数据量折线图 - 分片加载 (${end}/${chartData.length}个数据点)`,
-    //     },
-    //   });
-
-    //   // Add delay to observe progressive loading
-    //   await new Promise((resolve) => setTimeout(resolve, 100));
-    // }
 
     setIsLoading(false);
   };
 
-  // Virtual rendering implementation
+  // Data Zoom 加载
   const loadVirtualRenderingData = () => {
     setIsLoading(true);
 
@@ -145,13 +148,14 @@ const LargeDataChart = () => {
       chartInstance.current = initChart(chartRef.current);
     }
 
-    // Configure virtual rendering
+    const start = 0,
+      end = 20;
     chartInstance.current.setOption({
       dataZoom: [
         {
           type: "inside",
-          start: 0,
-          end: 20, // Initially show 20% of data
+          start,
+          end,
           zoomLock: false,
         },
         {
@@ -166,13 +170,13 @@ const LargeDataChart = () => {
         },
       ],
       title: {
-        text: `大数据量折线图 - 虚拟渲染 (初始显示20%数据)`,
+        text: `DataZoom 加载${start}%-${end}%`,
       },
     });
 
     // Handle zoom events for virtual rendering
     let startIndex = 0;
-    let endIndex = Math.floor(chartData.length * 0.2);
+    let endIndex = Math.floor(chartLength * 0.2);
 
     chartInstance.current.on("datazoom", function () {
       const option = chartInstance.current.getOption();
@@ -181,12 +185,12 @@ const LargeDataChart = () => {
 
       // Update visible range
       startIndex = Math.max(0, Math.floor(startValue));
-      endIndex = Math.min(chartData.length, Math.ceil(endValue) + 1);
+      endIndex = Math.min(chartLength, Math.ceil(endValue) + 1);
 
       // Update title to show current range
       chartInstance.current.setOption({
         title: {
-          text: `大数据量折线图 - 虚拟渲染 (当前显示: ${startIndex}-${endIndex})`,
+          text: `DataZoom (当前显示: ${startIndex}-${endIndex})`,
         },
       });
     });
@@ -194,7 +198,7 @@ const LargeDataChart = () => {
     setIsLoading(false);
   };
 
-  // Aggregation optimization implementation
+  // 降采样 lttb minmax
   const loadAggregatedData = () => {
     setIsLoading(true);
 
@@ -235,7 +239,7 @@ const LargeDataChart = () => {
     };
 
     // Set aggregation factor - final number of points to display
-    const aggregationFactor = 30000;
+    const aggregationFactor = chartLength / 10;
     const aggregatedData = aggregateData(chartData, aggregationFactor);
 
     // Update chart
@@ -246,7 +250,33 @@ const LargeDataChart = () => {
         },
       ],
       title: {
-        text: `大数据量折线图 - 聚合优化 (${chartData.length}个点聚合为${aggregatedData.length}个点)`,
+        text: `聚合优化 (${chartLength}个点聚合为${aggregatedData.length}个点)`,
+      },
+    });
+
+    setIsLoading(false);
+  };
+
+  // 使用官方降采样
+  const loadSamplingData = (samplingType) => {
+    setIsLoading(true);
+
+    if (!chartInstance.current) {
+      chartInstance.current = initChart(chartRef.current);
+    }
+
+    // Update chart
+    chartInstance.current.setOption({
+      series: [
+        {
+          type: "line",
+          data: chartData,
+          showSymbol: false,
+          sampling: samplingType,
+        },
+      ],
+      title: {
+        text: `官方降采样:${samplingType}`,
       },
     });
 
@@ -255,7 +285,7 @@ const LargeDataChart = () => {
 
   // Switch optimization method and reload data
   useEffect(() => {
-    if (!chartData.length) return;
+    if (!chartLength) return;
 
     // Clear previous chart instance
     if (chartInstance.current) {
@@ -263,19 +293,16 @@ const LargeDataChart = () => {
       chartInstance.current = null;
     }
 
-    switch (activeTab) {
-      case "chunked":
-        loadChunkedData();
-        break;
-      case "virtual":
-        loadVirtualRenderingData();
-        break;
-      case "aggregated":
-        loadAggregatedData();
-        break;
+    const renderTypeMap = {
+      chunked: loadChunkedData,
+      virtual: loadVirtualRenderingData,
+      aggregated: loadAggregatedData,
+      lttp: loadSamplingData,
+      minmax: loadSamplingData,
+    };
 
-      default:
-        loadChunkedData();
+    if (renderTypeMap[activeTab.value]) {
+      renderTypeMap[activeTab.value](activeTab.value);
     }
 
     return () => {
@@ -303,38 +330,22 @@ const LargeDataChart = () => {
   return (
     <div className="flex flex-col w-full mx-auto p-4 text-black">
       <div className="mb-4">
-        <h2 className="text-lg font-bold mb-2">30万数据点加载优化方案</h2>
+        <h2 className="text-lg font-bold mb-2">渲染优化</h2>
         <div className="flex space-x-2">
-          <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "virtual" ? "bg-blue-500 text-black" : "bg-gray-200"
-            }`}
-            onClick={() => setActiveTab("virtual")}
-            disabled={isLoading}
-          >
-            虚拟渲染
-          </button>
-          <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "chunked" ? "bg-blue-500 text-black" : "bg-gray-200"
-            }`}
-            onClick={() => setActiveTab("chunked")}
-            disabled={isLoading}
-          >
-            分片加载
-          </button>
-
-          <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "aggregated"
-                ? "bg-blue-500 text-black"
-                : "bg-gray-200"
-            }`}
-            onClick={() => setActiveTab("aggregated")}
-            disabled={isLoading}
-          >
-            聚合优化
-          </button>
+          {renderTypes.map((type) => (
+            <button
+              key={type.value}
+              className={`px-4 py-2 rounded ${
+                activeTab.value === type.value
+                  ? "bg-blue-500 text-black"
+                  : "bg-gray-200"
+              }`}
+              onClick={() => setActiveTab(type)}
+              disabled={isLoading}
+            >
+              {type.label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -350,39 +361,7 @@ const LargeDataChart = () => {
 
       <div className="mt-4 p-4 bg-gray-100 rounded">
         <h3 className="font-bold mb-2">当前优化方案说明:</h3>
-        {activeTab === "chunked" && (
-          <div>
-            <p className="mb-2">
-              <strong>分片加载:</strong>{" "}
-              将数据分割成多个片段，逐片加载并累积显示。
-            </p>
-            <p>优点: 分步处理减轻了浏览器负担，避免卡顿。</p>
-            <p>缺点: 前期加载的数据可能不能代表整体趋势。</p>
-          </div>
-        )}
-        {activeTab === "virtual" && (
-          <div>
-            <p className="mb-2">
-              <strong>虚拟渲染:</strong>{" "}
-              只渲染当前视口内的数据，滚动或缩放时动态加载数据。
-            </p>
-            <p>优点: 高效处理超大数据集，内存占用低。</p>
-            <p>缺点: 实现较复杂，需要处理缩放事件。</p>
-            <p className="mt-2 text-blue-600">
-              提示: 使用鼠标滚轮或拖动下方滑块缩放查看不同区域数据
-            </p>
-          </div>
-        )}
-        {activeTab === "aggregated" && (
-          <div>
-            <p className="mb-2">
-              <strong>聚合优化:</strong>{" "}
-              对原始数据进行聚合计算，减少实际渲染的数据点数量。
-            </p>
-            <p>优点: 显著减少渲染压力，保持数据趋势。</p>
-            <p>缺点: 细节信息可能丢失，不适合需要精确展示的场景。</p>
-          </div>
-        )}
+        <div>{activeTab.desc}</div>
       </div>
     </div>
   );

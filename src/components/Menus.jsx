@@ -1,21 +1,11 @@
 import React from "react";
 
 export default function Menus({
-  projects = [], // Add default empty array
+  projects = [],
   activeProject = 0,
-  setActiveProject = () => {}, // Add default no-op function
+  setActiveProject = () => {},
 }) {
-  // Default menu items to use if no projects are provided
-  const defaultMenuItems = [
-    { title: "学习", icon: "🏠" },
-    { title: "特别任务", icon: "🎯" },
-    { title: "宝石小店", icon: "🏪" },
-    { title: "个人档案", icon: "👤" },
-    { title: "更多", icon: "•••" },
-  ];
-
-  // Use provided projects or fallback to default items
-  const menuItems = projects.length > 0 ? projects : defaultMenuItems;
+  const menuItems = projects;
 
   return (
     <div className="w-64 px-4 bg-white shadow-lg h-screen flex flex-col fixed left-0 top-0 bottom-0 border-r-gray-200 border-r-2">
@@ -37,13 +27,7 @@ export default function Menus({
             }`}
           >
             <div className="w-12 h-12 flex items-center justify-center mr-2">
-              {typeof item.icon === "string" && (
-                <div
-                  className={`text-2xl rounded-lg flex items-center justify-center`}
-                >
-                  {item.icon}
-                </div>
-              )}
+              <img src={item.icon} alt="" className="w-1/2 h-1/2" />
             </div>
             <span className="text-gray-700">{item.title}</span>
           </button>

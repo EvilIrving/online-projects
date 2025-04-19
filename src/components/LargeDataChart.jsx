@@ -4,365 +4,370 @@ import { getLineChartData } from "@/mock/lineChartData";
 
 const LargeDataChart = () => {
   const [chartData, setChartData] = useState([]);
-  const [chartLength, setChartLength] = useState(0);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const renderTypes = [
-    {
-      label: "分片加载",
-      value: "chunked",
-      desc: "使用 progressive 和 progressiveThreshold 设定片大小",
-    },
-    { label: "虚拟渲染", value: "virtual", desc: "DataZoom 设定 min & max" },
-    { label: "聚合优化", value: "aggregated", desc: "自定义降采样方案" },
-    { label: "Lttp", value: "lttp", desc: "官方降采样" },
-    { label: "MinMax", value: "minmax", desc: "官方降采样" },
-  ];
-  const [activeTab, setActiveTab] = useState(renderTypes[0]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 性能数据收集
+  const [perfMetrics, setPerfMetrics] = useState({
+    fetchTime: 0, // 数据加载时间
+    renderTime: 0, // 渲染时间
+    dataPoints: 0, // 数据点数量
+  });
+
+  // 优化配置项
+  const optimizationConfigs = [
+    { key: "animation", label: "禁用动画", value: false },
+    { key: "silent", label: "禁用交互", value: true },
+    { key: "large", label: "大数据模式", value: true },
+    { key: "useDirtyRect", label: "脏矩形优化", value: false },
+  ];
+  const [optimizations, setOptimizations] = useState(
+    Object.fromEntries(optimizationConfigs.map((c) => [c.key, false]))
+  );
+
+  // 渲染方法配置
+  const renderMethods = [
+    {
+      id: "virtual",
+      label: "虚拟渲染",
+      desc: "使用 DataZoom 进行虚拟滚动",
+      handlerName: "renderVirtual",
+    },
+    {
+      id: "chunked",
+      label: "分片加载",
+      desc: "使用 progressive 加载数据",
+      handlerName: "renderChunked",
+    },
+    {
+      id: "lttb",
+      label: "LTTB降采样",
+      desc: "官方降采样算法",
+      handlerName: "renderLTTB",
+    },
+    {
+      id: "minmax",
+      label: "MinMax降采样",
+      desc: "官方降采样算法",
+      handlerName: "renderMinMax",
+    },
+  ];
+  const [activeMethod, setActiveMethod] = useState(renderMethods[0]);
+
+  // 数据获取
   useEffect(() => {
-    // Fetch data
-    console.time("fetchData");
-    const data = getLineChartData();
-    setChartLength(data.data.length);
-    // Format data for chart and sort by date
-    console.timeEnd("fetchData");
-    const formattedData = data.data
+    performance.mark("dataFetchStart");
+    const { data } = getLineChartData();
+    performance.mark("dataFetchEnd");
+    performance.measure("fetchTime", "dataFetchStart", "dataFetchEnd");
+
+    performance.getEntriesByName("fetchTime").forEach((entry) => {
+      setPerfMetrics((prev) => ({
+        ...prev,
+        fetchTime: entry.duration,
+      }));
+    });
+
+    // 清除性能记录，避免内存泄漏
+    performance.clearMarks("dataFetchStart");
+    performance.clearMarks("dataFetchEnd");
+    performance.clearMeasures("fetchTime");
+
+    const formatted = data
       .map((item) => [item.date, item.value])
-      .sort((a, b) => new Date(a[0]) - new Date(b[0])); // 按日期升序排序
-    setChartData(formattedData);
+      .sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+    setChartData(formatted);
   }, []);
 
-  // Initialize chart base configuration
-  const initChart = (containerRef) => {
-    if (!containerRef) return null;
+  // 图表基础配置
+  const baseChartConfig = {
+    title: { text: "大数据量优化示例", left: "center" },
+    tooltip: {
+      trigger: "item",
+      formatter: (params) =>
+        `${params.data[0]}<br/>值: ${params.data[1].toFixed(2)}`,
+    },
+    xAxis: { type: "category", boundaryGap: false },
+    yAxis: { type: "value", axisLabel: { formatter: "{value} 元" } },
+    grid: { left: "3%", right: "4%", bottom: "3%", containLabel: true },
+  };
 
-    // 渲染引擎 优化
-    const chart = echarts.init(containerRef, null, { renderer: "canvas" });
-    const option = {
-      title: {
-        text: "大数据量散点图优化示例",
-        left: "center",
-      },
-      legend: {
-        data: ["金额"],
-        left: "left",
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: function (params) {
-          return `${params.data[0]}<br/>金额: ${params.data[1].toFixed(2)} 元`;
-        },
-      },
-      grid: {
-        left: "3%",
-        right: "4%",
-        bottom: "3%",
-        containLabel: true,
-      },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        axisLabel: {
-          formatter: function (value) {
-            return value;
-          },
-        },
-      },
-      yAxis: {
-        type: "value",
-        scale: true,
-        axisLabel: {
-          formatter: "{value} 元",
-        },
-      },
+  // 初始化图表
+  const initChart = () => {
+    const chart = echarts.init(chartRef.current, null, {
+      renderer: "canvas",
+      useDirtyRect: optimizations.useDirtyRect, // 使用优化配置中的值
+    });
+
+    chart.setOption({
+      ...baseChartConfig,
       series: [
         {
-          name: "金额",
           type: "scatter",
-          symbolSize: function (data) {
-            // 根据数值大小调整点的大小
-            return Math.min(8, Math.max(2, data[1] / 10000));
-          },
-          itemStyle: {
-            color: function (params) {
-              // 根据数值大小调整颜色
-              const value = params.data[1];
-              return value > 50000
-                ? "#c23531"
-                : value > 30000
-                ? "#2f4554"
-                : "#61a0a8";
-            },
-            opacity: 0.7,
-          },
-          emphasis: {
-            itemStyle: {
-              color: "#c23531",
-              borderColor: "#fff",
-              borderWidth: 2,
-            },
-          },
           data: [],
+          itemStyle: { opacity: 0.7 },
+          ...optimizations,
         },
       ],
-    };
+    });
 
-    chart.setOption(option);
+    chart.on("finished", () => {
+      // 结束渲染时间记录并计算
+      performance.mark("renderTimeEnd");
+      performance.measure("renderTime", "renderTimeStart", "renderTimeEnd");
+
+      // 获取最新的性能记录
+      const renderEntries = performance.getEntriesByName("renderTime");
+      if (renderEntries.length > 0) {
+        // 只取最新的一条记录
+        const latestRenderEntry = renderEntries[renderEntries.length - 1];
+        setPerfMetrics((prev) => ({
+          ...prev,
+          renderTime: latestRenderEntry.duration,
+        }));
+
+        // 清除性能记录，避免内存泄漏
+        performance.clearMarks("renderTimeStart");
+        performance.clearMarks("renderTimeEnd");
+        performance.clearMeasures("renderTime");
+      }
+
+      // 更新数据点数量
+      setPerfMetrics((prev) => ({
+        ...prev,
+        dataPoints: chartData.length,
+      }));
+    });
     return chart;
   };
 
-  // 分片加载
-  const loadChunkedData = async () => {
-    setIsLoading(true);
-
-    // Initialize chart
-    if (!chartInstance.current) {
-      chartInstance.current = initChart(chartRef.current);
-    }
-
-    // Set initial empty chart
-    const progressive = chartLength / 10;
-    chartInstance.current.setOption({
-      series: [
-        {
-          data: chartData,
-          progressive: progressive, // 渐进渲染
-          progressiveThreshold: 5000, // 渐进渲染阈值
-        },
-      ],
-      title: {
-        text: `分片加载，每次${progressive}`,
-      },
-    });
-
-    setIsLoading(false);
-  };
-
-  // Data Zoom 加载
-  const loadVirtualRenderingData = () => {
-    setIsLoading(true);
-
-    if (!chartInstance.current) {
-      chartInstance.current = initChart(chartRef.current);
-    }
-
+  // 虚拟渲染方法（DataZoom实现）
+  const renderVirtual = () => {
+    const chart = chartInstance.current;
     const start = 0,
       end = 20;
-    chartInstance.current.setOption({
-      dataZoom: [
-        {
-          type: "inside",
-          start,
-          end,
-          zoomLock: false,
-        },
-        {
-          type: "slider",
-          start: 0,
-          end: 20,
-        },
-      ],
+
+    // 开始记录渲染时间
+    performance.mark("renderTimeStart");
+
+    // DataZoom配置
+    const dataZoomConfig = [
+      {
+        type: "slider",
+        xAxisIndex: [0],
+        start,
+        end,
+      },
+
+      {
+        type: "slider",
+        yAxisIndex: [0],
+        start: 0,
+        end: 100,
+      },
+    ];
+
+    chart.setOption({
+      ...baseChartConfig,
+      dataZoom: dataZoomConfig,
       series: [
         {
+          type: "scatter",
           data: chartData,
+          throttle: 2000,
+          ...optimizations,
         },
       ],
-      title: {
-        text: `DataZoom 加载${start}%-${end}%`,
-      },
+      title: { text: `虚拟渲染` },
     });
-
-    // Handle zoom events for virtual rendering
-    let startIndex = 0;
-    let endIndex = Math.floor(chartLength * 0.2);
-
-    chartInstance.current.on("datazoom", function () {
-      const option = chartInstance.current.getOption();
-      const startValue = option.dataZoom[0].startValue || 0;
-      const endValue = option.dataZoom[0].endValue || endIndex;
-
-      // Update visible range
-      startIndex = Math.max(0, Math.floor(startValue));
-      endIndex = Math.min(chartLength, Math.ceil(endValue) + 1);
-
-      // Update title to show current range
-      chartInstance.current.setOption({
-        title: {
-          text: `DataZoom (当前显示: ${startIndex}-${endIndex})`,
-        },
-      });
-    });
-
-    setIsLoading(false);
   };
+  // 分片加载方法
+  const renderChunked = () => {
+    const chart = chartInstance.current;
+    const chunkSize = 10000;
 
-  // 降采样 lttb minmax
-  const loadAggregatedData = () => {
-    setIsLoading(true);
+    // 开始记录渲染时间
+    performance.mark("renderTimeStart");
 
-    // Initialize chart
-    if (!chartInstance.current) {
-      chartInstance.current = initChart(chartRef.current);
-    }
-
-    // Data aggregation function - group data and calculate averages
-    const aggregateData = (data, aggregationFactor) => {
-      const result = [];
-      const step = Math.max(1, Math.floor(data.length / aggregationFactor));
-
-      for (let i = 0; i < data.length; i += step) {
-        let sum = 0;
-        let count = 0;
-        let date = "";
-
-        const end = Math.min(i + step, data.length);
-        for (let j = i; j < end; j++) {
-          sum += data[j][1];
-          count++;
-          // Take the middle point's date as representative
-          if (j === Math.floor((i + end) / 2)) {
-            date = data[j][0];
-          }
-        }
-
-        if (count > 0) {
-          result.push([
-            date, // representative date
-            sum / count, // average value
-          ]);
-        }
-      }
-
-      return result;
-    };
-
-    // Set aggregation factor - final number of points to display
-    const aggregationFactor = chartLength / 10;
-    const aggregatedData = aggregateData(chartData, aggregationFactor);
-
-    // Update chart
-    chartInstance.current.setOption({
+    chart.setOption({
+      ...baseChartConfig,
       series: [
         {
-          data: aggregatedData,
+          type: "scatter",
+          data: chartData,
+          progressive: chunkSize,
+          progressiveThreshold: 2000,
+          ...optimizations,
         },
       ],
-      title: {
-        text: `聚合优化 (${chartLength}个点聚合为${aggregatedData.length}个点)`,
-      },
+      title: { text: "分片加载" },
     });
-
-    setIsLoading(false);
   };
+  // LTTB降采样方法
+  const renderLTTB = () => {
+    const chart = chartInstance.current;
 
-  // 使用官方降采样
-  const loadSamplingData = (samplingType) => {
-    setIsLoading(true);
+    // 开始记录渲染时间
+    performance.mark("renderTimeStart");
 
-    if (!chartInstance.current) {
-      chartInstance.current = initChart(chartRef.current);
-    }
-
-    // Update chart
-    chartInstance.current.setOption({
+    chart.setOption({
+      ...baseChartConfig,
       series: [
         {
           type: "line",
           data: chartData,
+          sampling: "lttb",
+          lineStyle: { width: 1 },
           showSymbol: false,
-          sampling: samplingType,
+          ...optimizations,
         },
       ],
-      title: {
-        text: `官方降采样:${samplingType}`,
-      },
+      title: { text: "LTTB降采样（官方实现）" },
     });
-
-    setIsLoading(false);
   };
 
-  // Switch optimization method and reload data
-  useEffect(() => {
-    if (!chartLength) return;
+  // MinMax降采样方法
+  const renderMinMax = () => {
+    const chart = chartInstance.current;
+    // 开始记录渲染时间
+    performance.mark("renderTimeStart");
+    chart.setOption({
+      ...baseChartConfig,
+      series: [
+        {
+          type: "line",
+          data: chartData,
+          sampling: "minmax",
+          lineStyle: { width: 1 },
+          showSymbol: false,
+          ...optimizations,
+        },
+      ],
+      title: { text: "MinMax降采样（官方实现）" },
+    });
+  };
 
-    // Clear previous chart instance
-    if (chartInstance.current) {
-      chartInstance.current.dispose();
-      chartInstance.current = null;
+  // 渲染方法切换
+  useEffect(() => {
+    console.log("初始化图表");
+    if (!chartData.length) return;
+
+    // 创建渲染函数映射表
+    const handlerMap = {
+      renderChunked,
+      renderVirtual,
+      renderLTTB,
+      renderMinMax,
+    };
+
+    setIsLoading(true);
+
+    if (chartInstance.current) chartInstance.current.dispose();
+
+    chartInstance.current = initChart();
+    // 通过函数名称查找对应的处理函数并执行
+    const handler = handlerMap[activeMethod.handlerName];
+    if (handler) {
+      handler();
+    } else {
+      console.error(`未找到处理函数: ${activeMethod.handlerName}`);
     }
 
-    const renderTypeMap = {
-      chunked: loadChunkedData,
-      virtual: loadVirtualRenderingData,
-      aggregated: loadAggregatedData,
-      lttp: loadSamplingData,
-      minmax: loadSamplingData,
-    };
+    setIsLoading(false);
+  }, [activeMethod, chartData, optimizations]);
 
-    if (renderTypeMap[activeTab.value]) {
-      renderTypeMap[activeTab.value](activeTab.value);
-    }
-
-    return () => {
-      if (chartInstance.current) {
-        chartInstance.current.dispose();
-      }
-    };
-  }, [activeTab, chartData]);
-
-  // Adjust chart when window size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (chartInstance.current) {
-        chartInstance.current.resize();
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  // 优化配置切换
+  const handleOptimizationChange = (key) => {
+    setOptimizations((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   return (
-    <div className="flex flex-col w-full mx-auto p-4 text-black">
-      <div className="mb-4">
-        <h2 className="text-lg font-bold mb-2">渲染优化</h2>
-        <div className="flex space-x-2">
-          {renderTypes.map((type) => (
-            <button
-              key={type.value}
-              className={`px-4 py-2 rounded ${
-                activeTab.value === type.value
-                  ? "bg-blue-500 text-black"
-                  : "bg-gray-200"
+    <div className="w-full flex min-h-screen p-4 bg-gray-50">
+      {/* 展示区域 */}
+      <section className="flex-4/5 mr-4">
+        {/* 控制区域 */}
+        <div className="mb-6 space-y-4">
+          {/* 方法选择按钮 */}
+          <div className="flex flex-wrap gap-2">
+            {renderMethods.map((method) => (
+              <button
+                key={method.id}
+                onClick={() => setActiveMethod(method)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
+              ${
+                activeMethod.id === method.id
+                  ? "bg-blue-600 text-white shadow-md hover:bg-blue-700"
+                  : "bg-white text-gray-600 shadow-sm hover:bg-gray-50 border border-gray-200"
               }`}
-              onClick={() => setActiveTab(type)}
-              disabled={isLoading}
+              >
+                {method.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 优化配置选项 */}
+          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+              性能选项配置
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              {optimizationConfigs.map((config) => (
+                <label
+                  key={config.key}
+                  className="flex items-center space-x-2 text-sm text-gray-600"
+                >
+                  <input
+                    type="checkbox"
+                    checked={optimizations[config.key]}
+                    onChange={() => handleOptimizationChange(config.key)}
+                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                  />
+                  <span>{config.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 图表区域 */}
+        <div className="flex-1 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+          {isLoading ? (
+            <div className="h-full w-full flex items-center justify-center bg-gray-50/50">
+              <div className="text-center space-y-2">
+                <div className="animate-spin inline-block w-6 h-6 border-2 border-current border-t-transparent text-blue-600 rounded-full" />
+                <p className="text-gray-600 text-sm">数据加载中...</p>
+              </div>
+            </div>
+          ) : (
+            <div ref={chartRef} className="w-full h-[610px]" />
+          )}
+        </div>
+      </section>
+
+      {/* 性能指标面板 */}
+      <section className="flex-1/5   bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">性能指标</h3>
+        <div className="grid grid-cols-1 gap-4">
+          {Object.entries(perfMetrics).map(([key, value]) => (
+            <div
+              key={key}
+              className="p-3 bg-gray-50 rounded-md border border-gray-200"
             >
-              {type.label}
-            </button>
+              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                {key}
+              </div>
+              <div className="mt-1 text-lg font-semibold text-blue-600">
+                {typeof value === "number" ? `${value.toFixed(2)} ms` : value}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
-
-      {isLoading && (
-        <div className="inset-0 flex items-center justify-center bg-white bg-opacity-70 z-10">
-          <div className="text-xl font-bold">加载中...</div>
-        </div>
-      )}
-
-      <div className="border border-gray-300 rounded p-2">
-        <div ref={chartRef} className="w-full h-96" />
-      </div>
-
-      <div className="mt-4 p-4 bg-gray-100 rounded">
-        <h3 className="font-bold mb-2">当前优化方案说明:</h3>
-        <div>{activeTab.desc}</div>
-      </div>
+      </section>
     </div>
   );
 };

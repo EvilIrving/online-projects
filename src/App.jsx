@@ -17,8 +17,8 @@ function App() {
             activeProject={activeProject}
             setActiveProject={setActiveProject}
           />
-          <LargeDataChart></LargeDataChart>
-          {/* <Project project={projects[activeProject]} /> */}
+          {/* <LargeDataChart></LargeDataChart> */}
+          <Project project={projects[activeProject]} />
         </div>
       </div>
     </>

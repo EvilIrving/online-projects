@@ -98,6 +98,7 @@ export default function Project({ project }) {
             <AcroImage
               className="w-full h-auto rounded-md transition-transform duration-500 hover:scale-105"
               src={item.url}
+              loader={true}
               alt={item.name}
             />
           </div>

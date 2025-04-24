@@ -2,6 +2,7 @@ import tmsImg from "@/assets/tms.png";
 import lucheng from "@/assets/lucheng.svg";
 import yuhe from "@/assets/yuhe.png";
 import yunguan from "@/assets/yunguan.png";
+import telegram from "@/assets/telegram.png";
 import zhiwu from "@/assets/zhiwu.png";
 import yanglao from "@/assets/yanglao.ico";
 
@@ -80,7 +81,7 @@ export const projects = [
     description:
       "一个 Telegram Bot，用于爬取 Product Hub 网站上的产品信息，并将其发送到指定的 Telegram 频道。",
     techs: ["Python", "Telegram Bot API", "GraphQL", "Cloudflare Workers"],
-    icon: zhiwu,
+    icon: telegram,
     images: getImagesFromFolder("telegram"),
   },
   {

@@ -59,6 +59,7 @@ const LargeDataChart = () => {
   useEffect(() => {
     performance.mark("dataFetchStart");
     const { data } = getLineChartData();
+
     performance.mark("dataFetchEnd");
     performance.measure("fetchTime", "dataFetchStart", "dataFetchEnd");
 

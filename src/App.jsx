@@ -3,6 +3,7 @@ import { useState } from "react";
 import Menus from "./components/Menus";
 import Project from "./components/Project";
 import LargeDataChart from "./components/LargeDataChart";
+import G2Charts from "./components/G2Charts";
 import { projects } from "./config/projects";
 
 function App() {
@@ -17,8 +18,9 @@ function App() {
             activeProject={activeProject}
             setActiveProject={setActiveProject}
           />
+          <G2Charts></G2Charts>
           {/* <LargeDataChart></LargeDataChart> */}
-          <Project project={projects[activeProject]} />
+          {/* <Project project={projects[activeProject]} /> */}
         </div>
       </div>
     </>

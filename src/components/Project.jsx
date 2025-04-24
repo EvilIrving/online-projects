@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Image as AcroImage } from "@arco-design/web-react";
-import { Tag, Space } from "@arco-design/web-react";
+import { Image as AcroImage, Tag, Space  } from "@arco-design/web-react";
+ 
 
 export default function Project({ project }) {
   const { techs, name, description, images } = project;

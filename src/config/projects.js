@@ -28,14 +28,12 @@ const getImagesFromFolder = (folderPath) => {
 
 export const projects = [
   {
-    // title:
-    // "新一代通信管理系统（TMS）与 管网 TOSS 系统（Vue.js、HighTopo、无界）",
-    title: "通信管理系统",
-    name: "新一代通信管理系统（TMS）", // 详细的名称
+
+    title: "管理系统",
+    name: "管理系统", // 详细的名称
     techs: ["Vue.js", "HighTopo", "无界", "Element UI", "Tippy.js"],
     icon: tmsImg,
-    description:
-      "TMS2.0 集成实时监控、资源管理、通信方式规划、检修管控等功能，通过数据可视化技术大幅提升通信调度效率。TOSS 平台涵盖管网集团通信资源的全生命周期管理，包括网络规划、运维检修、风险分析、资源共享等功能。",
+    description:"",
     images: getImagesFromFolder("nanrui"),
   },
   {

@@ -8,7 +8,7 @@ export const getLineChartData = () => {
       {
         date: '@datetime("yyyy-MM-dd HH:mm")',
         // 金额随机，保留2位小数
-        "value|1-100000.1": 1,
+        "value|1-1000.1": 1,
       },
     ],
   });

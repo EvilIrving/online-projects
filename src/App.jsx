@@ -8,6 +8,7 @@ import { projects } from "./config/projects";
 
 function App() {
   const [activeProject, setActiveProject] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -16,11 +17,15 @@ function App() {
           <Menus
             projects={projects}
             activeProject={activeProject}
-            setActiveProject={setActiveProject}
+            setActiveProject={(index) => {
+              setIsLoading(true);
+              setActiveProject(index);
+            }}
           />
-          <G2Charts></G2Charts>
+          {isLoading && <div>Loading...</div>}
+          {/* <G2Charts></G2Charts> */}
           {/* <LargeDataChart></LargeDataChart> */}
-          {/* <Project project={projects[activeProject]} /> */}
+          <Project project={projects[activeProject]} setIsLoading={setIsLoading} />
         </div>
       </div>
     </>

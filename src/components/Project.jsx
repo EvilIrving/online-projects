@@ -37,6 +37,18 @@ export default function Project({ project }) {
     processImages();
   }, [images]);
 
+  useEffect(() => {
+    const images = document.querySelectorAll('img');
+    let loadedCount = 0;
+    images.forEach((img) => {
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          setIsLoading(false);
+        }
+      };
+    });
+  }, []);
   const COLORS = [
     "red",
     "orangered",

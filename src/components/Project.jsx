@@ -84,9 +84,9 @@ export default function Project({ project, setIsLoading }) {
     "gray",
   ];
   return (
-    <div className="w-full max-w-[1056px] pt-2 mx-2 md:mx-16 my-auto">
+    <div className="w-full max-w-[1056px] pt-2 mx-4 md:mx-16 my-auto">
       {/* 新增 sticky 标题栏 */}
-      <div className="min-h-[82px] sticky top-[58px]   z-[210] md:top-0 md:px-0">
+      <div className="min-h-[82px] sticky top-0 md:px-0 z-[210]">
         <div className="h-0 md:h-6 bg-white"></div>
         <div className="w-full md:w-1/2 mx-auto bg-blue-500 bg-[length:700px_200px] text-white grid grid-cols-[1fr_min-content] gap-x-4 gap-y-1 p-4 overflow-hidden relative md:bg-cover md:rounded-xl md:gap-y-1.5">
           <div className="flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function Project({ project, setIsLoading }) {
 
       <div
         ref={wrapperRef}
-        className="px-8 sm:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-5/6  min-h-screen mx-auto"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-5/6  min-h-screen mx-auto"
       >
         {processedImages.length === 0 &&
         project.images &&

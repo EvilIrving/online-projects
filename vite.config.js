@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-// import { preloadImages } from "@/plugins/preloadImgs";
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path"; // Node.js 的内置模块，用于处理路径
@@ -15,12 +15,6 @@ export default defineConfig({
       exclude: /\.(gif|svg)$/i,
       includePublic: true,
     }),
-    // preloadImages({
-    //   dir: "assets/**/*.{png,jpg,webp}", // 匹配图片的glob规则
-    //   attrs: {
-    //     rel: "preload", // 覆盖默认的prefetch
-    //   },
-    // }),
   ],
   resolve: {
     alias: {

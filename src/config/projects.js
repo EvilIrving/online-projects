@@ -30,7 +30,7 @@ export const projects = [
   {
 
     title: "管理系统",
-    name: "管理系统", // 详细的名称
+    name: "管理系统",
     techs: ["Vue.js", "HighTopo", "无界", "Element UI", "Tippy.js"],
     icon: tmsImg,
     description:"",

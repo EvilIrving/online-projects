@@ -4,6 +4,7 @@ export default function Menus({
   projects = [],
   activeProject = 0,
   setActiveProject = () => {},
+  isLoading = false, // Add isLoading prop
 }) {
   const menuItems = projects;
 
@@ -20,7 +21,10 @@ export default function Menus({
           <button
             key={index}
             onClick={() => setActiveProject(index)}
+            disabled={isLoading} // Disable button when loading
             className={`flex items-center py-0 px-3 rounded-xl transition-colors ${
+              isLoading ? 'opacity-50 cursor-not-allowed' : '' // Add styles for disabled state
+            } ${
               index === activeProject
                 ? "bg-[#ddf4ff] border-2 border-[#84d8ff]"
                 : "hover:bg-gray-100"

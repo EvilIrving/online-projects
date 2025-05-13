@@ -1,54 +1,78 @@
 import { useState, useEffect, useRef } from "react";
-import { Image as AcroImage, Tag, Space  } from "@arco-design/web-react";
- 
+import { Image as AcroImage, Tag, Space } from "@arco-design/web-react";
 
-export default function Project({ project }) {
+export default function Project({ project, setIsLoading }) {
   const { techs, name, description, images } = project;
   const [processedImages, setProcessedImages] = useState([]);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    const processImages = async () => {
-      const results = await Promise.all(
-        images.map(async (image) => {
-          const img = new Image();
-          img.src = image;
+    const { images: currentImages } = project || { images: [] };
 
-          await new Promise((resolve) => {
-            img.onload = resolve;
-          });
+    const processAllImages = async () => {
+      try {
+        setProcessedImages([]); // Clear previous images immediately
 
-          const targetHeight = 180;
-          const width = (targetHeight / img.height) * img.width;
+        if (!currentImages || currentImages.length === 0) {
+          if (setIsLoading) {
+            setIsLoading(false);
+          }
+          return;
+        }
 
-          return {
-            url: image,
-            w: width,
-            h: targetHeight,
-            name: `Image ${images.indexOf(image) + 1}`,
-            show: false,
-          };
-        })
-      );
+        const results = await Promise.all(
+          currentImages.map(async (imageUrl, index) => {
+            try {
+              const img = new Image();
+              img.src = imageUrl;
 
-      setProcessedImages(results);
-    };
+              await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = (err) => {
+                  console.error(`Failed to load image: ${imageUrl}`, err);
+                  resolve({ url: imageUrl, name: `Image ${index + 1} (Error)`, isError: true });
+                };
+              });
 
-    processImages();
-  }, [images]);
+              if (img.isError || img.height === 0 || img.width === 0) {
+                return {
+                  url: imageUrl,
+                  w: 180, // Default for error/placeholder
+                  h: 180,
+                  name: `Image ${index + 1} (Load Error)`,
+                  isError: true,
+                };
+              }
 
-  useEffect(() => {
-    const images = document.querySelectorAll('img');
-    let loadedCount = 0;
-    images.forEach((img) => {
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === images.length) {
+              const targetHeight = 180;
+              const calculatedWidth = (targetHeight / img.height) * img.width;
+
+              return {
+                url: imageUrl,
+                w: calculatedWidth,
+                h: targetHeight,
+                name: `Image ${index + 1}`,
+              };
+            } catch (mapError) {
+              console.error(`Error processing individual image ${imageUrl}:`, mapError);
+              return { url: imageUrl, name: `Image ${index + 1} (Processing Error)`, isError: true };
+            }
+          })
+        );
+        setProcessedImages(results.filter(img => !img.isError));
+      } catch (error) {
+        console.error("Error processing images array:", error);
+        setProcessedImages([]);
+      } finally {
+        if (setIsLoading) {
           setIsLoading(false);
         }
-      };
-    });
-  }, []);
+      }
+    };
+
+    processAllImages();
+  }, [project, setIsLoading]);
+
   const COLORS = [
     "red",
     "orangered",

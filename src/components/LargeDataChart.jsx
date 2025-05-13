@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
-// import { getLineChartData } from "@/mock/lineChartData";
-import OriginData from "@/components/data.json";
+import { getLineChartData } from "@/mock/lineChartData";
+
 const LargeDataChart = () => {
   const [chartData, setChartData] = useState([]);
   const chartRef = useRef(null);
@@ -58,8 +58,7 @@ const LargeDataChart = () => {
   // 数据获取
   useEffect(() => {
     performance.mark("dataFetchStart");
-    // const { data } = getLineChartData();
-    const data  = OriginData;
+    const { data } = getLineChartData();
 
     performance.mark("dataFetchEnd");
     performance.measure("fetchTime", "dataFetchStart", "dataFetchEnd");
@@ -353,7 +352,6 @@ const LargeDataChart = () => {
 
       {/* 性能指标面板 */}
       <section className="flex-1/5 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-
         <h3 className="text-sm font-semibold text-gray-700 mb-3">性能指标</h3>
         <div className="grid grid-cols-1 gap-4">
           {Object.entries(perfMetrics).map(([key, value]) => (

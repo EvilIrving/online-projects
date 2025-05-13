@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Chart } from "@antv/g2";
 import { getLineChartData } from "@/mock/lineChartData";
-import OriginData from "@/components/data.json";
+
 const G2Charts = () => {
   const container = useRef(null);
   const chart = useRef(null);
@@ -30,10 +30,7 @@ const G2Charts = () => {
     const fetchData = async () => {
       try {
         performance.mark("startFetchMark");
-        // const { data } = getLineChartData();
-        const data = OriginData
-
-        console.log(data, "data");
+        const { data } = getLineChartData();
 
         performance.mark("endFetchMark");
         performance.measure("fetchTime", "startFetchMark", "endFetchMark");

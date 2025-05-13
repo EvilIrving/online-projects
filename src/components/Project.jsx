@@ -90,9 +90,9 @@ export default function Project({ project, setIsLoading }) {
         <div className="h-0 md:h-6 bg-white"></div>
         <div className="w-full md:w-1/2 mx-auto bg-blue-500 bg-[length:700px_200px] text-white grid grid-cols-[1fr_min-content] gap-x-4 gap-y-1 p-4 overflow-hidden relative md:bg-cover md:rounded-xl md:gap-y-1.5">
           <div className="flex items-center gap-2">
-            <h1 className="text-white text-base font-bold leading-6  m-0">
+            <h2 className="text-white leading-normal text-base font-bold  m-0">
               {name}
-            </h1>
+            </h2>
           </div>
           <span className="text-white text-xl font-bold leading-6 whitespace-normal break-words md:text-2xl md:leading-7"></span>
           <div className="flex items-center gap-1 justify-self-end">
@@ -107,7 +107,9 @@ export default function Project({ project, setIsLoading }) {
 
       <div className="mb-6">
         <section>
-          <p className="text-xl my-6 text-gray-700">{description}</p>
+          <p className="text-sm sm:text-base my-6 text-gray-700">
+            {description}
+          </p>
         </section>
         <section>
           <Space wrap>

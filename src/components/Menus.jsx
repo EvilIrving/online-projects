@@ -1,4 +1,5 @@
 import React from "react";
+import { Tooltip } from "@arco-design/web-react";
 
 export default function Menus({
   projects = [],
@@ -19,11 +20,11 @@ export default function Menus({
       <div className="flex flex-col gap-2 px-2">
         {menuItems.map((item, index) => (
           <button
-            key={index}
             onClick={() => setActiveProject(index)}
+            key={item.title}
             disabled={isLoading} // Disable button when loading
-            className={`flex items-center py-0 px-3 rounded-xl transition-colors ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : '' // Add styles for disabled state
+            className={`flex items-center py-0 px-3 rounded-xl transition-all duration-300 ${
+              isLoading ? "opacity-50 cursor-not-allowed filter grayscale" : "" // 增强禁用状态的视觉反馈
             } ${
               index === activeProject
                 ? "bg-[#ddf4ff] border-2 border-[#84d8ff]"
@@ -34,6 +35,9 @@ export default function Menus({
               <img src={item.icon} alt="" className="w-1/2 h-1/2" />
             </div>
             <span className="text-gray-700">{item.title}</span>
+            {isLoading && index === activeProject && (
+              <span className="ml-2 inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+            )}
           </button>
         ))}
       </div>

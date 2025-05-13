@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Image as AcroImage, Tag, Space } from "@arco-design/web-react";
+import { Image as AcroImage, Tag, Space, Spin } from "@arco-design/web-react";
 
 export default function Project({ project, setIsLoading }) {
-  const { techs, name, description, images } = project;
+  const { techs, name, description } = project;
   const [processedImages, setProcessedImages] = useState([]);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
+    console.log("Project component mounted");
     const { images: currentImages } = project || { images: [] };
 
     const processAllImages = async () => {
@@ -21,52 +22,44 @@ export default function Project({ project, setIsLoading }) {
         }
 
         const results = await Promise.all(
-          currentImages.map(async (imageUrl, index) => {
-            try {
-              const img = new Image();
-              img.src = imageUrl;
+          currentImages.map((imageUrl, index) => {
+            return new Promise((resolve) => {
+              const img = new window.Image();
 
-              await new Promise((resolve, reject) => {
-                img.onload = resolve;
-                img.onerror = (err) => {
-                  console.error(`Failed to load image: ${imageUrl}`, err);
-                  resolve({ url: imageUrl, name: `Image ${index + 1} (Error)`, isError: true });
-                };
-              });
-
-              if (img.isError || img.height === 0 || img.width === 0) {
-                return {
+              img.onload = () => {
+                const targetHeight = 180;
+                const calculatedWidth = (targetHeight / img.height) * img.width;
+                resolve({
                   url: imageUrl,
-                  w: 180, // Default for error/placeholder
+                  w: calculatedWidth,
+                  h: targetHeight,
+                  name: `Image ${index + 1}`,
+                });
+              };
+
+              img.onerror = (err) => {
+                console.error(`Failed to load image: ${imageUrl}`, err);
+                resolve({
+                  url: imageUrl,
+                  w: 180,
                   h: 180,
                   name: `Image ${index + 1} (Load Error)`,
                   isError: true,
-                };
-              }
-
-              const targetHeight = 180;
-              const calculatedWidth = (targetHeight / img.height) * img.width;
-
-              return {
-                url: imageUrl,
-                w: calculatedWidth,
-                h: targetHeight,
-                name: `Image ${index + 1}`,
+                });
               };
-            } catch (mapError) {
-              console.error(`Error processing individual image ${imageUrl}:`, mapError);
-              return { url: imageUrl, name: `Image ${index + 1} (Processing Error)`, isError: true };
-            }
+
+              img.src = imageUrl; // 直接设置src开始加载图片
+            });
           })
         );
-        setProcessedImages(results.filter(img => !img.isError));
+        console.log("----------", results);
+
+        if (setIsLoading) setIsLoading(false);
+        setProcessedImages(results); // Keep all results, including those with isError: true
       } catch (error) {
         console.error("Error processing images array:", error);
         setProcessedImages([]);
-      } finally {
-        if (setIsLoading) {
-          setIsLoading(false);
-        }
+        if (setIsLoading) setIsLoading(false);
       }
     };
 
@@ -129,16 +122,51 @@ export default function Project({ project, setIsLoading }) {
         ref={wrapperRef}
         className="grid grid-cols-3 gap-4 w-5/6 min-h-screen mx-auto"
       >
-        {processedImages.map((item, index) => (
-          <div key={index} className="relative cursor-pointer">
-            <AcroImage
-              className="w-full h-auto rounded-md transition-transform duration-500 hover:scale-105"
-              src={item.url}
-              loader={true}
-              alt={item.name}
-            />
-          </div>
-        ))}
+        {processedImages.length === 0 &&
+        project.images &&
+        project.images.length > 0
+          ? // 显示图片加载中的占位符网格
+            Array.from({ length: project.images.length }).map((_, index) => (
+              <div key={`placeholder-${index}`} className="relative">
+                <div className="w-full h-[180px] bg-gray-50 flex flex-col items-center justify-center rounded-md text-center p-2 border border-dashed border-gray-200">
+                  <Spin className="mb-2" />
+                  <p className="text-xs text-gray-400 font-medium">加载中...</p>
+                </div>
+              </div>
+            ))
+          : // 显示已处理的图片
+            processedImages.map((item, index) => (
+              <div key={index} className="relative cursor-pointer group">
+                {item.isError ? (
+                  <div className="w-full h-[180px] bg-gray-100 flex flex-col items-center justify-center rounded-md text-center p-2 border border-dashed border-gray-300">
+                    <svg
+                      className="w-10 h-10 text-gray-400 mb-1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.158 0a.225.225 0 0 1 .225.225V8.7a.225.225 0 0 1-.45 0V8.475a.225.225 0 0 1 .225-.225Z"
+                      />
+                    </svg>
+                    <p className="text-xs text-gray-500 font-medium">
+                      {item.name || "图片加载错误"}
+                    </p>
+                  </div>
+                ) : (
+                  <AcroImage
+                    className="w-full h-auto rounded-md transition-transform duration-500 hover:scale-105"
+                    src={item.url}
+                    loader={true}
+                    alt={item.name}
+                  />
+                )}
+              </div>
+            ))}
       </div>
     </div>
   );

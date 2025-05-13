@@ -29,7 +29,7 @@ function App() {
           {/* {isLoading && (
             <div className="fixed inset-0 bg-white bg-opacity-80 z-50 flex items-center justify-center">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <Spin size="large" />
+                <Spin size="20" />
                 <p className="mt-4 text-gray-600 font-medium">
                   正在加载项目资源...
                 </p>

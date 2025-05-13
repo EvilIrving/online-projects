@@ -7,6 +7,8 @@ export default function Project({ project, setIsLoading }) {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
+    // 切换项目时自动滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: "smooth" });
     console.log("Project component mounted");
     const { images: currentImages } = project || { images: [] };
 
@@ -25,6 +27,15 @@ export default function Project({ project, setIsLoading }) {
           currentImages.map((imageUrl, index) => {
             return new Promise((resolve) => {
               const img = new window.Image();
+
+              // 添加人为延迟，模拟网络加载时间（500-2000ms随机延迟）
+              // const artificialDelay = Math.floor(Math.random() * 200) + 500;
+
+              // 正确处理异步延迟
+              // const loadWithDelay = async () => {
+              //   await new Promise((r) => setTimeout(r, artificialDelay));
+              //   img.src = imageUrl; // 延迟后再设置src触发图片加载
+              // };
 
               img.onload = () => {
                 const targetHeight = 180;
@@ -48,7 +59,9 @@ export default function Project({ project, setIsLoading }) {
                 });
               };
 
+              // loadWithDelay(); // 启动延迟加载过程
               img.src = imageUrl; // 直接设置src开始加载图片
+
             });
           })
         );
@@ -129,7 +142,7 @@ export default function Project({ project, setIsLoading }) {
             Array.from({ length: project.images.length }).map((_, index) => (
               <div key={`placeholder-${index}`} className="relative">
                 <div className="w-full h-[180px] bg-gray-50 flex flex-col items-center justify-center rounded-md text-center p-2 border border-dashed border-gray-200">
-                  <Spin className="mb-2" />
+                  <Spin size={20} className="mb-2" />
                   <p className="text-xs text-gray-400 font-medium">加载中...</p>
                 </div>
               </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "@arco-design/web-react";
 
 export default function Menus({
   projects = [],

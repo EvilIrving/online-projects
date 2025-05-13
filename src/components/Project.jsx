@@ -28,15 +28,6 @@ export default function Project({ project, setIsLoading }) {
             return new Promise((resolve) => {
               const img = new window.Image();
 
-              // 添加人为延迟，模拟网络加载时间（500-2000ms随机延迟）
-              // const artificialDelay = Math.floor(Math.random() * 200) + 500;
-
-              // 正确处理异步延迟
-              // const loadWithDelay = async () => {
-              //   await new Promise((r) => setTimeout(r, artificialDelay));
-              //   img.src = imageUrl; // 延迟后再设置src触发图片加载
-              // };
-
               img.onload = () => {
                 const targetHeight = 180;
                 const calculatedWidth = (targetHeight / img.height) * img.width;
@@ -59,9 +50,7 @@ export default function Project({ project, setIsLoading }) {
                 });
               };
 
-              // loadWithDelay(); // 启动延迟加载过程
               img.src = imageUrl; // 直接设置src开始加载图片
-
             });
           })
         );
@@ -95,11 +84,11 @@ export default function Project({ project, setIsLoading }) {
     "gray",
   ];
   return (
-    <div className="w-full max-w-[1056px] pt-2 mx-16 my-auto">
+    <div className="w-full max-w-[1056px] pt-2 mx-2 md:mx-16 my-auto">
       {/* 新增 sticky 标题栏 */}
       <div className="min-h-[82px] sticky top-[58px]   z-[210] md:top-0 md:px-0">
         <div className="h-0 md:h-6 bg-white"></div>
-        <div className="w-1/2 mx-auto bg-blue-500 bg-[length:700px_200px] text-white grid grid-cols-[1fr_min-content] gap-x-4 gap-y-1 p-4 overflow-hidden relative md:bg-cover md:rounded-xl md:gap-y-1.5">
+        <div className="w-full md:w-1/2 mx-auto bg-blue-500 bg-[length:700px_200px] text-white grid grid-cols-[1fr_min-content] gap-x-4 gap-y-1 p-4 overflow-hidden relative md:bg-cover md:rounded-xl md:gap-y-1.5">
           <div className="flex items-center gap-2">
             <h1 className="text-white text-base font-bold leading-6  m-0">
               {name}
@@ -133,7 +122,7 @@ export default function Project({ project, setIsLoading }) {
 
       <div
         ref={wrapperRef}
-        className="grid grid-cols-3 gap-4 w-5/6 min-h-screen mx-auto"
+        className="px-8 sm:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-5/6  min-h-screen mx-auto"
       >
         {processedImages.length === 0 &&
         project.images &&

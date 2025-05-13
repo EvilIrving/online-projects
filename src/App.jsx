@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <div className="w-full h-full mx-0 my-auto text-black">
-        <div className="flex gap-4  pl-64">
+        <div className="flex gap-4  lg:pl-64">
           <Menus
             projects={projects}
             activeProject={activeProject}

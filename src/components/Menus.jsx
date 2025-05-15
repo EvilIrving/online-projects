@@ -6,7 +6,11 @@ export default function Menus({
   setActiveProject = () => {},
   isLoading = false,
 }) {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  // 判断是否是移动端
+  const isMobile = window.innerWidth >= 768;
+  // 控制菜单的显示和隐藏
+  const [showMobileMenu, setShowMobileMenu] = useState(isMobile);
   const menuItems = projects;
 
   return (

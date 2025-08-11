@@ -1,145 +1,167 @@
-# Vue 3 社交卡片项目
+# Vue 3 作品集展示项目
 
-一个基于 Vue 3 和 TypeScript 构建的现代化社交卡片展示项目，支持多种社交媒体平台卡片样式。
+基于 Vue 3 和 TypeScript 构建的现代化个人作品集网站，集成社交媒体卡片、3D 图形、数据可视化等多种交互式展示组件。
 
-## 项目特点
+## ✨ 项目特点
 
-- 🎨 多种社交媒体卡片样式 (微博、音乐、播客、网站等)
-- 🚀 基于 Vue 3 + Vite 的现代化前端架构
-- 📱 响应式设计，适配多种设备
-- 🎭 使用 JSX 语法编写组件
-- 🌈 动态主题支持
+- 🎨 **个人档案模块** - 带动画效果的技能展示和个人介绍
+- 📱 **社交媒体卡片** - 精美的多平台卡片样式 (GitHub、Instagram、Twitter 等)
+- 🖼️ **图片展示** - 响应式图片卡片，支持描述和链接跳转
+- 🎭 **互动演示** - 3D 图形、图表、地图、设计模式等丰富示例
+- 🌗 **响应式设计** - 移动端优先，完美适配各种设备
+- ⚡ **现代化架构** - Vue 3 Composition API + TypeScript
+- 🎪 **流畅动画** - Lottie 动画和丝滑过渡效果
 
-## 技术栈
+## 🚀 技术栈
 
 ### 核心框架
 
-- [Vue 3](https://vuejs.org/) - 前端框架
-- [Vite](https://vitejs.dev/) - 构建工具
+- [Vue 3](https://vuejs.org/) - 渐进式前端框架
+- [Vite](https://vitejs.dev/) - 新一代前端构建工具
+- [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
 
-### UI & 动画
+### UI 与样式
 
 - [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
-- [Lottie](https://airbnb.design/lottie/) - 动画渲染 (v5.12.2)
-- [clsx](https://github.com/lukeed/clsx) - 动态 class 组合
+- [clsx](https://github.com/lukeed/clsx) - 动态 class 名组合工具
+- 自定义字体：DMSerifText、Nabla、NotoColorEmoji
+
+### 动画与图形
+
+- [Lottie](https://airbnb.design/lottie/) - 高质量动画渲染 (v5.12.2)
+- [Three.js](https://threejs.org/) - 3D 图形和可视化
+- 交互式图表和数据可视化
 
 ### 工具库
 
-- [Day.js](https://day.js.org/) - 日期处理
-- [@pureadmin/utils](https://github.com/pure-admin/utils) - 实用工具集
+- [Day.js](https://day.js.org/) - 快速日期处理
+- [@pureadmin/utils](https://github.com/pure-admin/utils) - 管理员工具集
 
-## 项目结构
+## 📁 项目结构
 
-```shell
-.
-├── public/                 # 静态资源目录
-│   ├── favicon.ico        # 网站图标
-│   └── index.html         # 主 HTML 文件
-│
-├── src/                   # 源代码目录
-│   ├── api/              # API 接口管理
-│   │   ├── modules/      # 按模块划分的接口文件
-│   │   │   ├── user.ts   # 用户相关接口
-│   │   │   └── product.ts # 产品相关接口
-│   │   └── request.ts    # axios 请求封装
-│   │
-│   ├── assets/           # 静态资源
-│   │   ├── images/       # 图片资源
-│   │   ├── styles/       # 样式文件
-│   │   │   ├── variables.scss  # 全局变量
-│   │   │   └── global.scss     # 全局样式
-│   │   └── fonts/        # 字体文件
-│   │
-│   ├── components/       # 全局公共组件
-│   │   ├── common/       # 基础公共组件
-│   │   │   ├── Button/
-│   │   │   └── Input/
-│   │   └── business/     # 业务公共组件
-│   │       ├── Header/
-│   │       └── Footer/
-│   │
-│   ├── composables/      # 组合式函数
-│   │   ├── useUser.ts
-│   │   └── useTheme.ts
-│   │
-│   ├── constants/        # 常量定义
-│   │   ├── api.ts       # API 相关常量
-│   │   └── enum.ts      # 枚举值
-│   │
-│   ├── directives/       # 全局指令
-│   │   ├── permission.ts
-│   │   └── index.ts
-│   │
-│   ├── hooks/           # 钩子函数
-│   │   ├── usePermission.ts
-│   │   └── useCache.ts
-│   │
-│   ├── layouts/         # 布局组件
-│   │   ├── DefaultLayout.vue
-│   │   └── UserLayout.vue
-│   │
-│   ├── router/          # 路由配置
-│   │   ├── modules/     # 路由模块
-│   │   ├── guards.ts    # 路由守卫
-│   │   └── index.ts     # 路由主文件
-│   │
-│   ├── stores/          # Pinia 状态管理
-│   │   ├── modules/     # 状态模块
-│   │   │   ├── user.ts
-│   │   │   └── app.ts
-│   │   └── index.ts
-│   │
-│   ├── types/           # TypeScript 类型定义
-│   │   ├── api.ts       # API 相关类型
-│   │   └── global.d.ts  # 全局类型声明
-│   │
-│   ├── utils/           # 工具函数
-│   │   ├── auth.ts      # 认证相关
-│   │   ├── request.ts   # 请求相关
-│   │   └── storage.ts   # 存储相关
-│   │
-│   ├── views/           # 页面组件
-│   │   ├── home/        # 按模块划分页面
-│   │   ├── user/
-│   │   └── error/
-│   │
-│   ├── App.vue          # 根组件
-│   ├── main.ts          # 入口文件
-│   └── env.d.ts         # 环境变量类型声明
-│
-├── .env                  # 环境变量
-├── .env.development      # 开发环境变量
-├── .env.production       # 生产环境变量
-├── .eslintrc.js         # ESLint 配置
-├── .prettierrc          # Prettier 配置
-├── tsconfig.json        # TypeScript 配置
-├── vite.config.ts       # Vite 配置
-└── package.json         # 项目配置文件
+```
+my-vue-app/
+├── base/                          # 基础组件和样式
+│   ├── components/                # 可复用 UI 组件
+│   │   ├── base-card/            # 基础卡片组件 (tsx)
+│   │   ├── Icon.vue              # Lottie 图标包装器
+│   │   └── LottieIcon.vue        # Lottie 动画组件
+│   └── styles/                   # 全局样式和字体
+│       ├── fonts/                # 自定义字体文件
+│       └── *.css                 # 全局样式表
+├── build/                        # 构建配置
+├── doc/                          # 文档和示例
+│   ├── Charts/                   # 数据可视化示例
+│   ├── Three/                    # 3D 图形演示
+│   ├── designPatterns/           # 设计模式实现
+│   ├── map/                      # 交互式地图组件
+│   ├── topo/                     # 拓扑可视化
+│   ├── command/                  # 命令模式示例
+│   ├── flyweight/                # 享元模式演示
+│   ├── inkscreen/                # 墨水屏效果
+│   └── utils/                    # 文档工具函数
+├── domain/                       # 业务组件
+│   ├── card/                     # 社交媒体卡片
+│   │   ├── cards/               # 各个平台的卡片实现
+│   │   └── image-card/          # 图片卡片组件
+│   └── profile/                  # 个人档案模块
+├── src/                          # 主应用源码
+│   ├── assets/                   # 静态资源
+│   │   ├── icons/               # Lottie JSON 动画
+│   │   ├── images/              # 图片资源
+│   │   └── svg/                 # SVG 图标
+│   ├── components/              # Vue 组件
+│   ├── composables/             # Vue 3 组合式函数
+│   ├── constants/               # 应用常量
+│   ├── directives/              # 自定义 Vue 指令
+│   ├── router/                  # Vue Router 配置
+│   ├── stores/                  # Pinia 状态管理
+│   ├── types/                   # TypeScript 类型定义
+│   ├── utils/                   # 工具函数
+│   └── views/                   # 页面组件
+├── public/                      # 公共静态资源
+└── 配置文件                     # Vite、TypeScript、Tailwind 等配置
 ```
 
-## Card 说明
+## 🎯 核心组件
 
-卡片类型:
+### 社交媒体卡片
+- **GithubCard.vue** - GitHub 仓库和个人资料卡片
+- **InstagramCard.vue** - Instagram 帖子和个人资料卡片
+- **TwitterCard.vue** - Twitter 推文和个人资料卡片
+- **WeChatCard.vue** - 微信朋友圈和个人资料卡片
+- **XhsCard.vue** - 小红书卡片
 
-- Twitter
-- Instagram
-- Github
-- Product Hunt
-- Youtube
-- Buy Me a Coffee
-- Image & Video
-- Text
+### 交互功能
+- **个人档案** - 带动画效果的技能展示
+- **图片卡片** - 响应式图片画廊，支持描述文字
+- **3D 图形** - Three.js 驱动的可视化效果
+- **数据图表** - 交互式图表和图形
+- **设计模式** - 软件设计模式的实时示例
 
-- Map,位置
-- 小红书
-- 微信
-- 微博
-- 网易云
-- 即刻
-- 小宇宙
+## 🛠️ 开发环境
 
-寻找logo:
+### 环境要求
+- Node.js (^18.18.0 || ^20.9.0 || >=21.1.0)
+- pnpm (>=9)
 
-<https://svglogo.top/>
-<https://simpleicons.org/>
-<https://www.radix-ui.com/icons>
+### 快速开始
+```bash
+# 安装依赖
+pnpm install
+
+# 启动开发服务器
+pnpm dev
+
+# 构建生产版本
+pnpm build
+
+# 预览生产版本
+pnpm preview
+```
+
+### 可用脚本
+- `pnpm dev` - 启动带热重载的开发服务器
+- `pnpm build` - 构建生产版本并执行 TypeScript 检查
+- `pnpm preview` - 本地预览生产版本
+
+## 🎨 设计系统
+
+### 字体系统
+- **DMSerifText** - 优雅的衬线字体，用于标题
+- **Nabla** - 装饰性字体，用于特殊元素
+- **NotoColorEmoji** - 全彩 emoji 支持
+
+### 色彩体系
+- 使用 Tailwind CSS 默认色彩系统
+- 支持响应式深色/浅色模式
+- 自定义 CSS 变量保持一致的主题
+
+### 布局系统
+- 移动端优先的响应式设计
+- 灵活的 Tailwind CSS 网格系统
+- 基于组件的可复用架构
+
+## 🔗 实用资源
+
+### 图标和 Logo 来源
+- [SVGLogo](https://svglogo.top/) - SVG 图标和 Logo
+- [SimpleIcons](https://simpleicons.org/) - 流行品牌图标
+- [Radix Icons](https://www.radix-ui.com/icons) - 简洁 UI 图标
+
+### 开发工具
+- [Vue DevTools](https://devtools.vuejs.org/) - Vue 调试浏览器扩展
+- [Vite Plugin Vue](https://github.com/vitejs/vite-plugin-vue) - Vite 官方 Vue 插件
+- [TypeScript Vue Plugin](https://github.com/vuejs/language-tools) - Vue 的 TypeScript 支持
+
+## 🤝 参与贡献
+
+1. Fork 本仓库
+2. 创建功能分支 (`git checkout -b feature/新功能`)
+3. 提交更改 (`git commit -m '添加新功能'`)
+4. 推送到分支 (`git push origin feature/新功能`)
+5. 创建 Pull Request
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 详情请查看 [LICENSE](LICENSE) 文件。
